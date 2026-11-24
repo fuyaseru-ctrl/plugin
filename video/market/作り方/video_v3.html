@@ -1,0 +1,397 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>フヤセルAI【今日の相場環境】でできること v1（説明動画の絵・v3＝時間割 v3〔フヤセルAIの読みを直した声〕）</title>
+<!-- render(t) で t 秒目の絵を作る（時間で決まる）。時間割＝timeline_v3.json（build_timeline.py が作る）。2026-11-23
+     見た目は【PRO】の説明動画（video_v7.html）と同じ部品（ベージュの地・白いカード・赤い枠・指・右の説明カード・下の字幕）。
+     ★サイトの名前は出さない（本人の決め）
+     ★答えの表は数字を出さず「上がった／下がった」と「追い風／向かい風」だけ・隅に「画面はイメージです」・銘柄は〇〇〇〇（実在の銘柄を出さない）
+     ★「＋」の一覧は【PRO】の動画と同じ（本人の写真 11/07 から描き起こし）。プラグインの説明文は本物を見ていないので名前だけ -->
+<style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#e9e6e3}
+*{box-sizing:border-box}
+body{font-family:"BIZ UDPGothic","Yu Gothic",sans-serif;color:#222;-webkit-font-smoothing:antialiased}
+.L{position:absolute;opacity:0;will-change:opacity,transform}
+.min{font-family:"BIZ UDPMincho","Yu Mincho",serif}
+#lab{left:60px;top:38px;display:flex;align-items:center;gap:16px;font-size:30px;font-weight:bold}
+#lab .pill{background:#c41818;color:#fff;border-radius:8px;padding:6px 16px;font-size:26px}
+#sub{left:0;right:0;bottom:44px;text-align:center}
+#sub span{display:inline-block;background:#fff;border-radius:16px;padding:12px 44px;font-size:62px;font-weight:bold;line-height:1.35;box-shadow:0 6px 22px rgba(0,0,0,.13);letter-spacing:.02em}
+/* はじめに */
+#introCard{left:240px;top:150px;width:1440px;height:480px;background:#fff;border-radius:28px;box-shadow:0 18px 50px rgba(0,0,0,.10);text-align:center;padding-top:58px}
+#introCard img{width:120px;height:120px;border-radius:24px}
+#introCard .t1{font-size:86px;font-weight:bold;margin-top:22px;white-space:nowrap}
+#introCard .t2{font-size:54px;margin-top:10px}
+#introCard .bar{width:90px;height:6px;background:#c41818;margin:26px auto 0;border-radius:3px}
+#qCard{left:300px;top:150px;width:1320px;height:430px;background:#fff;border-radius:28px;box-shadow:0 18px 50px rgba(0,0,0,.10)}
+#qCard svg{position:absolute;left:78px;top:115px}
+#qCard .k{position:absolute;left:320px;top:100px;font-size:40px;color:#c41818;font-weight:bold;opacity:0}
+#qCard .q{position:absolute;left:320px;top:172px;font-size:72px;font-weight:bold;white-space:nowrap}
+#ansPill{left:0;right:0;top:650px;text-align:center}
+#ansPill span{display:inline-flex;align-items:center;gap:22px;background:#0d0d0d;color:#fff;border-radius:70px;padding:18px 56px 18px 26px;font-size:54px;font-weight:bold}
+#ansPill i{display:block;width:70px;height:70px;border-radius:50%;background:#fff;position:relative}
+#ansPill i:after{content:"";position:absolute;left:17px;top:17px;width:36px;height:36px;border:7px solid #0d0d0d;border-radius:50%;box-sizing:border-box}
+/* パソコンの画面の絵 */
+#br{left:100px;top:118px;width:1110px;height:752px;background:#fff;border-radius:20px;box-shadow:0 22px 60px rgba(0,0,0,.14);overflow:hidden}
+#br .top{position:relative;height:58px;background:#e8e4e0;display:flex;align-items:flex-end;padding:0 18px 0 22px;gap:10px;border-bottom:1px solid #e2dfdc}
+#br .dot{width:15px;height:15px;border-radius:50%;background:#cfcac5;margin-bottom:21px}
+.tab{height:50px;width:300px;margin-left:16px;border-radius:14px 14px 0 0;display:flex;align-items:center;gap:10px;padding:0 14px 0 16px;font-size:21px;background:#fff;color:#222;font-weight:bold}
+.tab .ti{width:26px;height:26px;border-radius:50%;background:#222;flex:none}
+.tab .tn{flex:1}
+#br .body{position:absolute;left:0;top:58px;width:1110px;height:694px;overflow:hidden}
+.scr{position:absolute;inset:0;opacity:0;overflow:hidden;background:#fcfcfc}
+.gside{position:absolute;left:0;top:0;bottom:0;width:240px;background:#f7f7f8;border-right:1px solid #e6e6e6;padding:24px 14px}
+.gside .ttl{font-size:27px;font-weight:bold;margin:0 0 20px 10px}
+.gside .it{display:flex;align-items:center;gap:10px;font-size:23px;padding:11px 12px;border-radius:12px;color:#222}
+.gside .it svg{display:block;flex:none}
+.gside .rl{font-size:19px;color:#999;margin:26px 0 6px 12px}
+.gside i{display:block;height:12px;border-radius:6px;background:#e4e4e4;margin:17px 12px}
+.gmain{position:absolute;left:240px;right:0;top:0;bottom:0;overflow:hidden}
+.gtog{position:absolute;left:295px;top:24px;width:280px;height:58px;border-radius:29px;background:#efefef;display:flex;padding:4px}
+.gtog div{flex:1;border-radius:25px;text-align:center;font-size:24px;line-height:50px;color:#666}
+.gtog .on{background:#fff;color:#111;font-weight:bold;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.ghead{position:absolute;left:0;right:0;text-align:center;font-size:38px}
+.gpill{position:absolute;height:92px;border:1px solid #e3e3e3;border-radius:46px;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.06);display:flex;align-items:center;padding:0 16px 0 30px;gap:18px}
+.gpill .tx{flex:1;font-size:32px;color:#222;white-space:nowrap;overflow:hidden}
+.gpill .pl{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;color:#333;flex:none;margin-left:-14px}
+.send{width:62px;height:62px;border-radius:50%;background:#8d5cf6;display:flex;align-items:center;justify-content:center;position:relative;flex:none}
+.send svg{display:block}
+.caret{display:inline-block;width:3px;height:36px;background:#222;vertical-align:middle;margin-left:2px}
+#gInN{left:40px;top:470px;width:790px}
+.pmenu{position:absolute;border:1px solid #e3e3e3;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:10px;opacity:0}
+.pmi{display:flex;align-items:center;gap:14px;height:44px;padding:0 16px;border-radius:12px;font-size:25px;color:#222;white-space:nowrap}
+.pmi svg{display:block;flex:none}
+.pmi .d{font-size:20px;color:#8a8a8a}
+.pmi .pci{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#5fb2f2,#7a6cf0);flex:none;position:relative}
+.pmi .pci:after{content:"";position:absolute;left:6px;top:6px;width:14px;height:14px;border:3px solid #fff;border-radius:50%;box-sizing:border-box}
+.pmi .ic{width:28px;height:28px;border-radius:6px;background:#31be2d;color:#fff;font-size:17px;text-align:center;line-height:28px;font-weight:bold;flex:none}
+#pMenu{left:40px;top:60px;width:790px}
+.chip3{display:inline-flex;align-items:center;gap:10px;color:#3d63d6;font-weight:bold;vertical-align:middle}
+.chip3 b{width:36px;height:36px;border-radius:8px;background:#31be2d;color:#fff;font-size:20px;text-align:center;line-height:36px}
+/* 会話 */
+#cv{position:absolute;left:0;top:0;right:0;height:1700px}
+.ub{position:absolute;right:34px;background:#ece5fb;border-radius:26px;display:flex;align-items:center;gap:12px;font-size:32px;padding:12px 28px;opacity:0}
+.ub .chip3 b{width:34px;height:34px;line-height:34px}
+#ub1{top:24px}#ub2{top:890px}#ub3{top:1400px}
+#chk{position:absolute;left:40px;top:110px;width:800px;opacity:0}
+#chk .h{font-size:30px;color:#888}
+#chips{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:20px}
+.ck{height:62px;border:2px solid #dedede;border-radius:14px;background:#fff;font-size:29px;font-weight:bold;display:flex;align-items:center;justify-content:center;gap:10px;opacity:0}
+.ck .v{color:#1f9d55;font-size:30px;opacity:0}
+#ansH{position:absolute;left:40px;top:110px;width:800px;font-size:34px;font-weight:bold;display:flex;align-items:center;gap:12px;flex-wrap:wrap;opacity:0}
+#ansH small{font-size:22px;color:#777;font-weight:normal;width:100%}
+.badge{display:inline-block;border-radius:12px;padding:6px 20px;font-weight:bold;color:#fff;white-space:nowrap}
+.bg-g{background:#1f9d55}.bg-y{background:#e8a400;color:#2a2000}.bg-r{background:#c41818}
+#tbl{position:absolute;left:40px;top:210px;width:790px;border:1px solid #e3e3e3;border-radius:14px;overflow:hidden;background:#fff}
+.tr{display:grid;grid-template-columns:270px 250px 270px;height:58px;align-items:center;border-top:1px solid #eee;font-size:28px;opacity:0}
+.tr>div{padding-left:22px}
+.tr.hd{background:#f3f3f3;color:#555;font-size:23px;height:50px;border-top:0;opacity:1}
+.up{color:#1a6fd1}.dn{color:#b45309}
+.wd{display:inline-block;border-radius:22px;padding:2px 18px;font-size:26px;font-weight:bold}
+.wd.g{background:#e3f5ea;color:#167a42}.wd.r{background:#fde8e8;color:#b31515}
+#col3{position:absolute;left:560px;top:210px;width:270px;height:342px;opacity:0}
+#danger{position:absolute;left:40px;top:572px;width:790px;border:2px solid #e5e5e5;border-radius:16px;background:#fff;padding:14px 22px;font-size:29px;opacity:0}
+#danger b{margin-right:8px}
+#tachi{position:absolute;left:40px;top:660px;width:790px;border:2px solid #e5e5e5;border-radius:16px;background:#fff;padding:16px 22px;opacity:0}
+#tachi .h{font-size:30px;font-weight:bold;margin-bottom:8px}
+.tl{display:flex;align-items:center;gap:16px;height:46px}
+.tl span{width:210px;font-size:24px;color:#555;flex:none}
+.tl i{display:block;height:14px;border-radius:7px;background:#e8e8e8}
+#ans2{position:absolute;left:40px;top:984px;width:790px;opacity:0}
+#ans2 .l1{font-size:34px;font-weight:bold;display:flex;align-items:center;gap:12px}
+#ans2 i{display:block;height:14px;border-radius:7px;background:#e8e8e8;margin-top:20px}
+#next{position:absolute;left:40px;top:1150px;width:790px;opacity:0}
+#next .h{font-size:30px;font-weight:bold;margin-bottom:10px}
+.nq{display:flex;align-items:center;gap:16px;font-size:30px;height:62px;opacity:0}
+.nq b{width:46px;height:46px;border-radius:50%;background:#c41818;color:#fff;font-size:26px;text-align:center;line-height:46px;flex:none}
+#think3{position:absolute;left:40px;top:1490px;font-size:30px;color:#888;opacity:0}
+#gfoot{position:absolute;left:0;right:0;top:560px;bottom:0;background:linear-gradient(to bottom,rgba(252,252,252,0),#fcfcfc 22px)}
+#gInC{left:40px;top:584px;width:790px}
+#imgNote{position:absolute;right:22px;bottom:15px;font-size:19px;color:#6b6460;opacity:0}
+/* 判定は3つ */
+#judgeCard{left:310px;top:56px;width:1300px;height:850px;background:#fff;border-radius:30px;box-shadow:0 18px 50px rgba(0,0,0,.10);padding:40px 90px}
+#judgeCard .k,#sumCard .k{font-size:34px;color:#c41818;font-weight:bold;text-align:center}
+#judgeCard .t,#sumCard .t{font-size:78px;text-align:center;margin-top:4px;white-space:nowrap}
+#judgeCard .bar,#sumCard .bar{width:90px;height:6px;background:#c41818;margin:18px auto 26px;border-radius:3px}
+.jrow{display:flex;align-items:center;gap:44px;margin-top:58px;opacity:0}
+.jb{width:480px;flex:none;text-align:center;border-radius:20px;padding:20px 0;font-size:60px;font-weight:bold;color:#fff}
+.jd{font-size:50px;font-weight:bold;white-space:nowrap;opacity:0}
+/* 右の説明のカード */
+.co{left:1262px;top:250px;width:590px;background:#fff;border-radius:22px;box-shadow:0 12px 36px rgba(0,0,0,.10);border-left:12px solid #c41818;padding:30px 34px}
+.co .k{font-size:28px;color:#c41818;font-weight:bold;margin-bottom:6px}
+.co .b{font-size:50px;font-weight:bold;line-height:1.4}
+.co .s{font-size:30px;color:#555;margin-top:12px;line-height:1.5}
+.co .mp{display:flex;flex-direction:column;gap:16px;margin-top:18px}
+.co .mp span{height:74px;border-radius:16px;font-size:36px;font-weight:bold;display:flex;align-items:center;padding:0 26px;border:3px solid #2f6fd6;color:#2f6fd6;background:#fff;opacity:0}
+/* 赤い枠・指 */
+#ring{left:0;top:0;border:7px solid #c41818;border-radius:24px;box-shadow:0 0 0 8px rgba(196,24,24,.18)}
+#cur{left:0;top:0;width:54px;height:54px}
+#rip{left:0;top:0;width:90px;height:90px;border-radius:50%;border:6px solid #c41818}
+/* まとめ */
+#sumCard{left:310px;top:56px;width:1300px;height:850px;background:#fff;border-radius:30px;box-shadow:0 18px 50px rgba(0,0,0,.10);padding:40px 90px}
+.srow{display:flex;align-items:center;gap:36px;margin-top:62px;opacity:0}
+.srow .n{width:92px;height:92px;border-radius:50%;background:#c41818;color:#fff;font-size:52px;font-weight:bold;text-align:center;line-height:92px;flex:none}
+.srow .w{font-size:64px;font-weight:bold;white-space:nowrap}
+#end{left:0;top:0;width:1920px;height:1080px;background:#e9e6e3;text-align:center}
+#end img{width:150px;height:150px;border-radius:30px;margin-top:300px}
+#end .t{font-size:84px;font-weight:bold;margin-top:30px;white-space:nowrap}
+#end .s{font-size:44px;color:#555;margin-top:18px}
+</style>
+</head>
+<body>
+<!-- はじめに -->
+<div class="L" id="introCard"><img src="assets/huya.png" alt=""><div class="t1">フヤセルAI【今日の相場環境】</div><div class="t2">で、できること</div><div class="bar"></div></div>
+<div class="L" id="qCard">
+  <svg width="200" height="200" viewBox="0 0 200 200"><g stroke="#e8a400" stroke-width="10" stroke-linecap="round"><path d="M100 14 V40 M100 160 V186 M14 100 H40 M160 100 H186 M39 39 L57 57 M143 143 L161 161 M161 39 L143 57 M57 143 L39 161"/></g><circle cx="100" cy="100" r="46" fill="#ffc83d" stroke="#e8a400" stroke-width="6"/></svg>
+  <div class="k" id="qK">毎朝の、この問いに</div>
+  <div class="q">今日は、動いていい日かな？</div>
+</div>
+<div class="L" id="ansPill"><span><i></i>ChatGPTが、答えます</span></div>
+
+<!-- パソコンの画面の絵 -->
+<div class="L" id="br">
+  <div class="top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><div class="tab"><span class="ti"></span><span class="tn">ChatGPT</span></div><div id="imgNote">画面はイメージです</div></div>
+  <div class="body">
+    <!-- 新しいチャット：＋から選ぶ -->
+    <div class="scr" id="sNew">
+      <div class="gside"><div class="ttl">ChatGPT</div>
+        <div class="it"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M4 21 L4 17 L16 5 L20 9 L8 21 Z M14 7 L18 11" fill="none" stroke="#333" stroke-width="2.2" stroke-linejoin="round"/></svg><span>新しいチャット</span></div>
+        <div class="rl">最近</div><i style="width:80%"></i><i style="width:62%"></i><i style="width:74%"></i><i style="width:55%"></i></div>
+      <div class="gmain">
+        <div class="gtog"><div class="on">Chat</div><div>Work</div></div>
+        <div class="ghead" style="top:350px">準備ができたらどうぞ。</div>
+        <div class="gpill" id="gInN"><span class="pl" id="gPlusN">＋</span><span class="tx" id="inN"></span><span class="md" style="font-size:24px;color:#999">Medium ⌄</span><span class="send" id="gSendN"><svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 26 V5 M6 13 L15 4 L24 13" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+        <div class="pmenu" id="pMenu">
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M17 8 L9.5 15.5 a2.5 2.5 0 0 0 3.5 3.5 L20.5 11.5 a5 5 0 0 0 -7 -7 L6 12 a7 7 0 0 0 10 10 L22 16" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/></svg><span>写真やファイルを追加</span><span class="d">コンピューターからアップロード</span></div>
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><rect x="2" y="2" width="22" height="22" rx="5" fill="#5ab0f0"/><circle cx="17" cy="9" r="3.5" fill="#ffd34d"/><path d="M2 20 L10 12 L18 20 L24 15 L24 24 L2 24 Z" fill="#3a8fd6"/></svg><span>画像を作成</span><span class="d">何でも視覚化</span></div>
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="10" fill="none" stroke="#22a6d8" stroke-width="2.2"/><ellipse cx="13" cy="13" rx="4.5" ry="10" fill="none" stroke="#22a6d8" stroke-width="2"/><path d="M3 13 H23" stroke="#22a6d8" stroke-width="2"/></svg><span>ウェブ検索</span><span class="d">リアルタイムのニュースや情報を検索</span></div>
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M4 15 L18 6 L21 11 L7 20 Z" fill="#3a7bd5"/><path d="M11 18 L8 25 M13 17 L16 25" stroke="#3a7bd5" stroke-width="2" stroke-linecap="round"/></svg><span>Deep Research</span><span class="d">詳細レポートを取得</span></div>
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M3 20 C7 8 10 8 11 14 S16 22 18 12 S22 6 24 9" fill="none" stroke="#1fae94" stroke-width="2.4" stroke-linecap="round"/></svg><span>スケッチ</span><span class="d">画像を描いて添付</span></div>
+          <div class="pmi"><span class="pci"></span><span>Plugin Creator</span><span class="d">Create and edit plugins</span></div>
+          <div class="pmi" id="pItem"><span class="ic">フ</span><span>フヤセルAI【今日の相場環境】</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- 送った後の会話（上に送って流す） -->
+    <div class="scr" id="sConv">
+      <div class="gside"><div class="ttl">ChatGPT</div>
+        <div class="it"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M4 21 L4 17 L16 5 L20 9 L8 21 Z M14 7 L18 11" fill="none" stroke="#333" stroke-width="2.2" stroke-linejoin="round"/></svg><span>新しいチャット</span></div>
+        <div class="rl">最近</div><i style="width:80%"></i><i style="width:62%"></i><i style="width:74%"></i><i style="width:55%"></i></div>
+      <div class="gmain">
+        <div id="cv">
+          <div class="ub" id="ub1"><span class="chip3"><b>フ</b>フヤセルAI【今日の相場環境】</span></div>
+          <div id="chk"><div class="h">指標を確かめています<span id="dots1"></span></div>
+            <div id="chips"><div class="ck" id="ck1">日経先物<span class="v">✓</span></div><div class="ck" id="ck2">NYダウ<span class="v">✓</span></div><div class="ck" id="ck3">ドル円<span class="v">✓</span></div>
+              <div class="ck" id="ck4">VIX<span class="v">✓</span></div><div class="ck" id="ck5">米国債10年<span class="v">✓</span></div><div class="ck" id="ck6">SOX指数<span class="v">✓</span></div></div></div>
+          <div id="ansH">今日の判定：<span class="badge bg-y" id="ansB">選んで動く日</span><small>（AIの分析による判定）</small></div>
+          <div id="tbl">
+            <div class="tr hd"><div>主な指標</div><div>前日から</div><div>日本株には</div></div>
+            <div class="tr" id="r1"><div>NYダウ</div><div class="up">上がった ↑</div><div><span class="wd g">追い風</span></div></div>
+            <div class="tr" id="r2"><div>SOX指数</div><div class="dn">下がった ↓</div><div><span class="wd r">向かい風</span></div></div>
+            <div class="tr" id="r3"><div>ドル円</div><div class="up">円安 ↑</div><div><span class="wd g">追い風</span></div></div>
+            <div class="tr" id="r4"><div>米国債10年</div><div class="up">上がった ↑</div><div><span class="wd r">向かい風</span></div></div>
+            <div class="tr" id="r5"><div>VIX</div><div class="dn">下がった ↓</div><div><span class="wd g">追い風</span></div></div>
+          </div>
+          <div id="col3"></div>
+          <div id="danger"><b>本当に危ない印：</b>出ていません</div>
+          <div id="tachi"><div class="h">今日の立ち回り</div>
+            <div class="tl"><span>追い風の業種</span><i style="width:420px"></i></div>
+            <div class="tl"><span>気をつける業種</span><i style="width:360px"></i></div>
+            <div class="tl"><span>寄り付きの見方</span><i style="width:450px"></i></div></div>
+          <div class="ub" id="ub2">〇〇〇〇</div>
+          <div id="ans2"><div class="l1">今日の相場は、この銘柄に<span class="badge bg-g" id="ans2b">追い風</span></div><i style="width:92%"></i><i style="width:76%"></i></div>
+          <div id="next"><div class="h">次に聞くと良いこと</div>
+            <div class="nq" id="nq1"><b>1</b>今日、追い風の業種は？</div>
+            <div class="nq" id="nq2"><b>2</b>持ち株の守り方は？</div>
+            <div class="nq" id="nq3"><b>3</b>明日の見通しは？</div></div>
+          <div class="ub" id="ub3">1</div>
+          <div id="think3">考えています<span id="dots3"></span></div>
+        </div>
+        <div id="gfoot"></div>
+        <div class="gpill" id="gInC"><span class="pl">＋</span><span class="tx" id="inC"></span><span class="md" style="font-size:24px;color:#999">Medium ⌄</span><span class="send" id="gSendC"><svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 26 V5 M6 13 L15 4 L24 13" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 右の説明 -->
+<div class="L co" data-a="5" data-b="7"><div class="k">使い方</div><div class="b">「＋」から選んで</div><div class="s">何も打たずに、<br>送信の↑を押すだけ</div></div>
+<div class="L co" data-a="8" data-b="10"><div class="k">ChatGPTが</div><div class="b">指標を確かめて、<br>判定します</div><div class="s">日経先物・NYダウ・ドル円など</div></div>
+<div class="L co" data-a="16" data-b="20"><div class="k">答えの中身</div><div class="b">指標の表と、<br>今日の立ち回り</div><div class="s">追い風か、向かい風か</div></div>
+<div class="L co" data-a="21" data-b="21"><div class="k">危ない日は</div><div class="b">はっきり<br>引き留めます</div></div>
+<div class="L co" data-a="22" data-b="25"><div class="k">銘柄も聞ける</div><div class="b">銘柄名か<br>銘柄コードを</div><div class="s">送るだけで、<br>追い風か向かい風か</div></div>
+<div class="L co" data-a="26" data-b="27"><div class="k">ほかにも聞けます</div><div class="mp"><span id="mp1">昨夜の米国市場</span><span id="mp2">今週の注目予定</span></div></div>
+<div class="L co" data-a="28" data-b="30"><div class="k">続きは番号で</div><div class="b">番号を<br>送るだけ</div></div>
+
+<!-- 判定は3つ -->
+<div class="L" id="judgeCard"><div class="k">判定は3つ</div><div class="t min">今日の相場環境</div><div class="bar"></div>
+  <div class="jrow" id="jr1"><div class="jb bg-g" id="jb1">攻めてよい日</div><div class="jd">追い風が多い</div></div>
+  <div class="jrow" id="jr2"><div class="jb bg-y" id="jb2">選んで動く日</div><div class="jd">追い風と向かい風が混ざる</div></div>
+  <div class="jrow" id="jr3"><div class="jb bg-r" id="jb3">守りを固める日</div><div class="jd">危ない印が重なる</div></div>
+</div>
+<!-- まとめ -->
+<div class="L" id="sumCard"><div class="k">まとめ</div><div class="t min">毎朝、取引の前に1回</div><div class="bar"></div>
+  <div class="srow" id="sr1"><div class="n">1</div><div class="w">「＋」から選ぶ</div></div>
+  <div class="srow" id="sr2"><div class="n">2</div><div class="w">何も打たずに送る</div></div>
+  <div class="srow" id="sr3"><div class="n">3</div><div class="w">判定を見てから動く</div></div>
+</div>
+<div class="L" id="end"><img src="assets/huya.png" alt=""><div class="t">フヤセルAI【今日の相場環境】</div><div class="s">毎朝の習慣に</div></div>
+
+<div class="L" id="ring"></div>
+<div class="L" id="rip"></div>
+<div class="L" id="cur"><svg width="54" height="54" viewBox="0 0 54 54"><path d="M8 4 L8 44 L18 34 L26 50 L34 46 L26 31 L41 31 Z" fill="#111" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/></svg></div>
+<div class="L" id="lab"><span class="pill">フヤセルAI【今日の相場環境】</span><span id="labT"></span></div>
+<div class="L" id="sub"><span id="subT"></span></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const cl = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const eo = x => 1 - Math.pow(1 - cl(x), 3);
+const eio = x => { x = cl(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const win = (t, a, b, fi = .35, fo = .35) => Math.max(0, Math.min(eo((t - a) / fi), eo((b - t) / fo)));
+function S(el, o, x = 0, y = 0, s = 1) { el.style.opacity = o.toFixed(3); el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${s.toFixed(4)})`; }
+let TL, CAP, CH, M;
+const cs = i => CAP[i].start, ce = i => CAP[i].end;
+function rectOf(sel) { const r = $(sel).getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height, cx: r.left + r.width / 2, cy: r.top + r.height / 2 }; }
+let RINGS, CURP, CURV, CLICKS, T;
+const N0 = 'はじめに', N1 = '使い方', N2 = '判定は3つ', N3 = '答えの中身', N4 = '銘柄も聞ける', N5 = '続きは番号で', N6 = 'まとめ';
+function setup() {
+  CAP = {}; TL.captions.forEach(c => CAP[c.i] = c);
+  CH = {}; TL.chapters.forEach(c => CH[c.name] = c);
+  M = TL.marks;
+  // 押す時刻
+  T = { plus: M.plus + .25, pick: M.pick + .45, push: M.push + .1, send2: M.okuru + .15, send3: M.tsuzuki + .2 };
+  RINGS = [['#gInN', cs(5) + .1, M.plus - .3], ['#gPlusN', M.plus - .35, T.plus + .3], ['#pItem', T.plus + .3, T.pick + .35],
+           ['#gInN', M.nani - .1, M.arrow - .2], ['#gSendN', M.arrow - .1, T.push + .35],
+           ['#chips', M.nikkei - .1, M.hantei - .3], ['#ansH', M.hantei + .1, ce(10)],
+           ['#jb1', M.seme - .1, ce(12)], ['#jb2', M.erande - .1, ce(14)], ['#jb3', M.mamori - .1, ce(15)],
+           ['#tbl', M.hyo - .1, ce(17) - .1], ['#col3', M.oikaze - .1, ce(18)], ['#danger', M.abunai - .1, ce(19)], ['#tachi', M.tachi - .1, ce(20)],
+           ['#gInC', cs(23) - .1, M.okuru - .2], ['#gSendC', M.okuru - .25, T.send2 + .35], ['#ans2b', M.kotae - .5, ce(25)],
+           ['#next', M.mittsu2 - .2, M.bango - .3], ['#gInC', M.bango - .2, M.tsuzuki - .1], ['#gSendC', M.tsuzuki - .1, T.send3 + .35]];
+  CURP = [[cs(5) - .2, [760, 820]], [T.plus - .5, '#gPlusN'], [T.plus + .1, '#gPlusN'], [T.pick - .45, '#pItem'], [T.pick + .15, '#pItem'],
+          [M.arrow - .6, '#gSendN'], [T.push + .3, '#gSendN'],
+          [cs(23) - .3, [900, 840]], [T.send2 - .5, '#gSendC'], [T.send2 + .3, '#gSendC'],
+          [M.bango - .5, [900, 840]], [T.send3 - .5, '#gSendC'], [T.send3 + .3, '#gSendC']];
+  CURV = [[cs(5) - .2, T.push + .6], [cs(23) - .3, T.send2 + .6], [M.bango - .5, T.send3 + .6]];
+  CLICKS = [[T.plus, '#gPlusN'], [T.pick, '#pItem'], [T.push, '#gSendN'], [T.send2, '#gSendC'], [T.send3, '#gSendC']];
+}
+function chapterAt(t) { let c = TL.chapters[0]; for (const x of TL.chapters) if (t >= x.gap_start) c = x; return c; }
+function typed(s, t, a, cps = 9) { const n = Math.floor(cl((t - a) * cps, 0, [...s].length)); return [...s].slice(0, n).join(''); }
+const caret = t => (Math.floor(t * 2) % 2 ? '<span class="caret"></span>' : '');
+function render(t) {
+  const c1 = CH[N1], c2 = CH[N2], c3 = CH[N3], c6 = CH[N6];
+  const now = chapterAt(t);
+  // ---- はじめに
+  const iOut = cs(2) - .55;   // v2：題のカードが消えきってから朝の問いを出す（重ならない）
+  S($('#introCard'), win(t, .15, iOut + .4, .6, .4), 0, (1 - eo((t - .15) / .7)) * 40 - eo((t - iOut) / .4) * 60);
+  const qa = cs(2) - .12, qb = c1.gap_start + .25;
+  S($('#qCard'), win(t, qa, qb, .45, .4), 0, (1 - eo((t - qa) / .5)) * 40);
+  $('#qK').style.opacity = eo((t - cs(3)) / .4).toFixed(3);
+  S($('#ansPill'), win(t, cs(4) - .05, qb, .45, .4), 0, (1 - eo((t - cs(4) + .05) / .45)) * 26);
+  // ---- パソコンの画面
+  const brA = c1.gap_start + .15, brB = c6.gap_start + .1;
+  const ja = cs(11) - .15, jb = c3.gap_start + .35;
+  const jo = win(t, ja, jb, .45, .4);   // 「判定は3つ」の大きなカード（出ている間は後ろの画面を隠す）
+  S($('#br'), win(t, brA, brB, .5, .5) * (1 - jo), 0, (1 - eo((t - brA) / .6)) * 30);
+  const sw = T.push + .35;
+  $('#sNew').style.opacity = win(t, brA - .1, sw + .08, .1, .16).toFixed(3);
+  $('#sConv').style.opacity = win(t, sw - .08, brB + .5, .16, .1).toFixed(3);
+  // 新しいチャット：＋ → 一覧 → 選ぶ → 何も打たずに↑
+  S($('#pMenu'), win(t, T.plus + .1, T.pick + .15, .25, .2), 0, (1 - eo((t - T.plus - .1) / .25)) * 10);
+  $('#pItem').style.background = (t >= T.pick - .55 && t < T.pick + .15) ? '#f1f1f1' : 'transparent';
+  const chip = '<span class="chip3"><b>フ</b>フヤセルAI【今日の相場環境】</span>';
+  $('#inN').innerHTML = t >= T.pick + .15 ? chip + caret(t) : (caret(t) || '<span style="color:#aaa">質問してみましょう</span>');
+  // 会話
+  S($('#ub1'), eo((t - sw - .15) / .3), 0, 0);
+  $('#chk').style.opacity = win(t, sw + .6, M.hantei - .05, .35, .25).toFixed(3);
+  $('#dots1').textContent = '・'.repeat(1 + Math.floor((t * 2.2) % 3));
+  [M.nikkei, M.ny, M.doru, M.doru + .45, M.doru + .9, M.doru + 1.35].forEach((a, i) => {
+    const k = eo((t - a + .1) / .3); S($('#ck' + (i + 1)), k, 0, (1 - k) * 12);
+    $('#ck' + (i + 1) + ' .v').style.opacity = eo((t - M.saishin - .1 - i * .18) / .2).toFixed(3);
+  });
+  { const k = eo((t - M.hantei) / .35); S($('#ansH'), k, 0, (1 - k) * 14); }
+  $('#tbl').style.opacity = eo((t - M.hyo + .45) / .3).toFixed(3);
+  [1, 2, 3, 4, 5].forEach(i => { const k = eo((t - M.hyo + .25 - i * .22) / .3); S($('#r' + i), k, (1 - k) * -16, 0); });
+  { const k = eo((t - M.abunai + .3) / .35); S($('#danger'), k, 0, (1 - k) * 14); }
+  { const k = eo((t - M.tachi + .3) / .35); S($('#tachi'), k, 0, (1 - k) * 14); }
+  $('#inC').innerHTML = (t >= M.code + .2 && t < T.send2 + .05) ? typed('〇〇〇〇', t, M.code + .2, 5) + caret(t)
+                       : (t >= M.bango + .1 && t < T.send3 + .05) ? typed('1', t, M.bango + .1, 5) + caret(t)
+                       : (caret(t) || '<span style="color:#aaa">質問してみましょう</span>');
+  S($('#ub2'), eo((t - T.send2 - .25) / .3), 0, 0);
+  { const k = eo((t - cs(24) - .1) / .4); S($('#ans2'), k, 0, (1 - k) * 14); }
+  { const k = eo((t - M.kotae + .55) / .3); $('#ans2b').style.opacity = k.toFixed(3); $('#ans2b').style.transform = `scale(${(.85 + .15 * k).toFixed(3)})`; }
+  { const k = eo((t - M.saigo + .3) / .35); S($('#next'), k, 0, (1 - k) * 14); }
+  [1, 2, 3].forEach(i => { const k = eo((t - M.mittsu2 + .35 - i * .25) / .3); S($('#nq' + i), k, (1 - k) * -16, 0); });
+  S($('#ub3'), eo((t - T.send3 - .25) / .3), 0, 0);
+  $('#think3').style.opacity = eo((t - T.send3 - .7) / .3).toFixed(3);
+  $('#dots3').textContent = '・'.repeat(1 + Math.floor((t * 2.2) % 3));
+  const scr = -330 * eio((t - M.abunai + .7) / .55) - 310 * eio((t - T.send2 - .1) / .55) - 260 * eio((t - M.saigo + .6) / .55) - 110 * eio((t - T.send3 - .1) / .45);
+  $('#cv').style.transform = `translateY(${scr.toFixed(1)}px)`;
+  $('#imgNote').style.opacity = win(t, M.hantei - .2, brB, .3, .3).toFixed(3);
+  // ---- 右の説明
+  for (const el of document.querySelectorAll('.co')) {
+    const a = cs(+el.dataset.a) - .05, b = ce(+el.dataset.b) - .05;
+    S(el, win(t, a, b, .35, .3), (1 - eo((t - a) / .4)) * 40, 0);
+  }
+  $('#mp1').style.opacity = eo((t - M.beikoku + .3) / .3).toFixed(3);
+  $('#mp2').style.opacity = eo((t - M.chumoku + .3) / .3).toFixed(3);
+  // ---- 判定は3つ
+  S($('#judgeCard'), jo, 0, (1 - eo((t - ja) / .5)) * 30);
+  // 「3つ」と言った所で3つの札を薄く並べ、読み上げに合わせて1つずつ色と説明を出す
+  [[1, cs(12) - .05], [2, cs(13) - .05], [3, cs(15) - .05]].forEach(([n, a], i) => {
+    const pre = eo((t - M.mittsu - i * .18) / .35), k = eo((t - a) / .4);
+    S($('#jr' + n), Math.max(pre, k), (1 - Math.max(pre, k)) * 40, 0);
+    const jb = $('#jb' + n); jb.style.opacity = (.35 + .65 * k).toFixed(3); jb.style.filter = `grayscale(${(1 - k).toFixed(3)})`;
+    $('#jr' + n + ' .jd').style.opacity = k.toFixed(3);
+  });
+  // ---- 赤い枠
+  let ro = 0, rr = null;
+  for (const [s, a, b] of RINGS) { const o = win(t, a, b, .3, .25); if (o > ro) { ro = o; rr = rectOf(s); } }
+  if (rr && ro > 0) {
+    const pad = 12, p = 1 + .015 * Math.sin(t * 6);
+    const R = $('#ring'); R.style.width = (rr.w + pad * 2) + 'px'; R.style.height = (rr.h + pad * 2) + 'px';
+    S(R, ro, rr.x - pad, rr.y - pad, p);
+  } else $('#ring').style.opacity = 0;
+  // ---- 指
+  let cv = 0; for (const [a, b] of CURV) cv = Math.max(cv, win(t, a, b, .25, .25));
+  if (cv > 0) {
+    const pts = CURP.map(([tt, at]) => { if (Array.isArray(at)) return [tt, at[0], at[1]]; const r = rectOf(at); return [tt, r.cx - 6, r.cy - 4]; });
+    let x = pts[0][1], y = pts[0][2];
+    for (let i = 0; i < pts.length; i++) {
+      if (t >= pts[i][0]) { x = pts[i][1]; y = pts[i][2]; }
+      if (i + 1 < pts.length && t >= pts[i][0] && t < pts[i + 1][0]) { const k = eio((t - pts[i][0]) / (pts[i + 1][0] - pts[i][0])); x = pts[i][1] + (pts[i + 1][1] - pts[i][1]) * k; y = pts[i][2] + (pts[i + 1][2] - pts[i][2]) * k; break; }
+    }
+    S($('#cur'), cv, x, y);
+    let rp = 0;
+    for (const [ct] of CLICKS) { const k = (t - ct) / .55; if (k >= 0 && k <= 1) rp = k; }
+    if (rp > 0) S($('#rip'), (1 - rp) * cv, x - 45 + 8, y - 45 + 6, .3 + rp * 1.2); else $('#rip').style.opacity = 0;
+  } else { $('#cur').style.opacity = 0; $('#rip').style.opacity = 0; }
+  { const pressed = new Set(); for (const [ct, s] of CLICKS) if (t - ct >= 0 && t - ct < .25) pressed.add(s);
+    for (const [, s] of CLICKS) $(s).style.filter = pressed.has(s) ? 'brightness(.82)' : ''; }
+  // ---- まとめ
+  const sa = c6.gap_start + .1, ea = cs(35) - .15;
+  S($('#sumCard'), win(t, sa, ea, .5, .35), 0, (1 - eo((t - sa) / .6)) * 30);   // 消えきってから終わりの画面（重ならない）
+  [['#sr1', cs(31) + .25], ['#sr2', cs(32) + .05], ['#sr3', cs(33) + .05]].forEach(([s, a]) => { const k = eo((t - a) / .4); S($(s), k, (1 - k) * 40, 0); });
+  $('#end').style.opacity = eo((t - ea) / .5).toFixed(3);
+  // ---- 上の札
+  const labName = { [N1]: '使い方', [N2]: '判定は3つ', [N3]: '答えの中身', [N4]: '銘柄も聞ける', [N5]: '続きは番号で' }[now.name];
+  $('#labT').textContent = labName || '';
+  S($('#lab'), labName ? win(t, now.gap_start + .3, now.end, .3, .2) * (1 - jo) : 0);
+  // ---- 字幕
+  let capT = '';
+  for (const c of TL.captions) { const ch = chapterAt(c.start); const b = Math.min(c.end, ch.end); if (t >= c.start && t < b) capT = c.text; }
+  $('#subT').textContent = capT; $('#sub').style.opacity = capT ? 1 : 0;
+}
+window.render = render;
+(async () => {
+  TL = await (await fetch('timeline_v3.json?v=' + Date.now())).json();
+  setup();
+  await document.fonts.ready;
+  await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
+  render(0);
+  window.TL = TL; window.READY = true;
+})();
+</script>
+</body>
+</html>
