@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>フヤセルAI【会話引継ぎ】でできること v1（説明動画の絵・時間割 v1）</title>
+<!-- v1（2026-11-26）＝逆指値かんたん設定の video_v2.html の部品（ベージュの地・白いカード・赤い枠・指・右の説明カード・下の字幕）で、7場面を会話引継ぎに描き替えた
+     render(t) で t 秒目の絵を作る（時間で決まる）。時間割＝timeline_v1.json（build_timeline_v1.py が作る・声 Otani）
+     ★字幕は全体の最高位の決まり（2026-11-26・CLAUDE.md の🎬）＝字幕の帯の下の端は画面の下から18%以上（bottom:195px）。
+       字幕の帯の上の端は 777 ＝ 絵（ChatGPT の画面・大きなカード・右のカード）は 760 より上に収める
+     ★値は見本（〇〇〇〇・〇,〇〇〇円）・証券会社の名前は出さない・判断の言葉は灰色の帯・隅に「画面はイメージです」
+     ★中身は 2026-11-25 の本物の試し（plugin master の記録）にそろえた＝1行目「この会話の引継ぎの1枚です。…」・枠の右上にコピー・
+       新しいチャットは1行目「引継ぎを受け取りました」で数字を確かめ直して続きから・「1」で短い1枚 -->
+<style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#e9e6e3}
+*{box-sizing:border-box}
+body{font-family:"BIZ UDPGothic","Yu Gothic",sans-serif;color:#222;-webkit-font-smoothing:antialiased}
+.L{position:absolute;opacity:0;will-change:opacity,transform}
+.min{font-family:"BIZ UDPMincho","Yu Mincho",serif}
+#lab{left:60px;top:30px;display:flex;align-items:center;gap:16px;font-size:30px;font-weight:bold}
+#lab .pill{background:#c41818;color:#fff;border-radius:8px;padding:6px 16px;font-size:26px}
+#sub{left:0;right:0;bottom:195px;text-align:center}/* ★字幕の帯の下の端は画面の下から18%以上（CLAUDE.md の🎬） */
+#sub span{display:inline-block;background:#fff;border-radius:16px;padding:12px 44px;font-size:62px;font-weight:bold;line-height:1.35;box-shadow:0 6px 22px rgba(0,0,0,.13);letter-spacing:.02em}
+/* はじめに */
+#introCard{left:240px;top:130px;width:1440px;height:480px;background:#fff;border-radius:28px;box-shadow:0 18px 50px rgba(0,0,0,.10);text-align:center;padding-top:58px}
+#introCard img{width:120px;height:120px;border-radius:24px}
+#introCard .t1{font-size:80px;font-weight:bold;margin-top:22px;white-space:nowrap}
+#introCard .t2{font-size:54px;margin-top:10px}
+#introCard .bar{width:90px;height:6px;background:#c41818;margin:26px auto 0;border-radius:3px}
+#qCard{left:160px;top:110px;width:1600px;height:440px;background:#fff;border-radius:28px;box-shadow:0 18px 50px rgba(0,0,0,.10)}
+#qCard svg{position:absolute;left:70px;top:112px}
+#qCard .k{position:absolute;left:320px;top:56px;font-size:40px;color:#c41818;font-weight:bold;opacity:0}
+#qCard .q{position:absolute;left:320px;font-size:60px;font-weight:bold;line-height:1.38;white-space:nowrap;opacity:0}
+#q1{top:136px}#q2{top:252px}
+#ansPill{left:0;right:0;top:600px;text-align:center}
+#ansPill span{display:inline-flex;align-items:center;gap:22px;background:#0d0d0d;color:#fff;border-radius:70px;padding:18px 56px 18px 26px;font-size:54px;font-weight:bold}
+#ansPill i{display:block;width:70px;height:70px;border-radius:50%;background:#fff;position:relative}
+#ansPill i:after{content:"";position:absolute;left:17px;top:17px;width:36px;height:36px;border:7px solid #0d0d0d;border-radius:50%;box-sizing:border-box}
+/* パソコンの画面の絵（下の端 756＝字幕の帯の上の端 777 より上） */
+#br{left:100px;top:96px;width:1110px;height:660px;background:#fff;border-radius:20px;box-shadow:0 22px 60px rgba(0,0,0,.14);overflow:hidden}
+#br .top{position:relative;height:58px;background:#e8e4e0;display:flex;align-items:flex-end;padding:0 18px 0 22px;gap:10px;border-bottom:1px solid #e2dfdc}
+#br .dot{width:15px;height:15px;border-radius:50%;background:#cfcac5;margin-bottom:21px}
+.tab{height:50px;width:300px;margin-left:16px;border-radius:14px 14px 0 0;display:flex;align-items:center;gap:10px;padding:0 14px 0 16px;font-size:21px;background:#fff;color:#222;font-weight:bold}
+.tab .ti{width:26px;height:26px;border-radius:50%;background:#222;flex:none}
+.tab .tn{flex:1}
+#br .body{position:absolute;left:0;top:58px;width:1110px;height:602px;overflow:hidden}
+.scr{position:absolute;inset:0;opacity:0;overflow:hidden;background:#fcfcfc}
+.gside{position:absolute;left:0;top:0;bottom:0;width:240px;background:#f7f7f8;border-right:1px solid #e6e6e6;padding:24px 14px}
+.gside .ttl{font-size:27px;font-weight:bold;margin:0 0 20px 10px}
+.gside .it{display:flex;align-items:center;gap:10px;font-size:23px;padding:11px 12px;border-radius:12px;color:#222}
+.gside .it svg{display:block;flex:none}
+.gside .rl{font-size:19px;color:#999;margin:26px 0 6px 12px}
+.gside i{display:block;height:12px;border-radius:6px;background:#e4e4e4;margin:17px 12px}
+.gmain{position:absolute;left:240px;right:0;top:0;bottom:0;overflow:hidden}
+.gtog{position:absolute;left:295px;top:24px;width:280px;height:58px;border-radius:29px;background:#efefef;display:flex;padding:4px}
+.gtog div{flex:1;border-radius:25px;text-align:center;font-size:24px;line-height:50px;color:#666}
+.gtog .on{background:#fff;color:#111;font-weight:bold;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.ghead{position:absolute;left:0;right:0;text-align:center;font-size:38px}
+.gpill{position:absolute;height:92px;border:1px solid #e3e3e3;border-radius:46px;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.06);display:flex;align-items:center;padding:0 16px 0 30px;gap:18px}
+.gpill .tx{flex:1;font-size:30px;color:#222;white-space:nowrap;overflow:hidden}
+.gpill .pl{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;color:#333;flex:none;margin-left:-14px}
+.send{width:62px;height:62px;border-radius:50%;background:#8d5cf6;display:flex;align-items:center;justify-content:center;position:relative;flex:none}
+.send svg{display:block}
+.caret{display:inline-block;width:3px;height:36px;background:#222;vertical-align:middle;margin-left:2px}
+#gInN{left:40px;top:290px;width:790px}
+#gInA,#gInB{left:40px;top:500px;width:790px}
+.pmenu{position:absolute;left:40px;top:244px;width:790px;border:1px solid #e3e3e3;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:10px;opacity:0}
+.pmi{display:flex;align-items:center;gap:14px;height:44px;padding:0 16px;border-radius:12px;font-size:25px;color:#222;white-space:nowrap}
+.pmi svg{display:block;flex:none}
+.pmi .d{font-size:20px;color:#8a8a8a}
+.pmi .ic{width:28px;height:28px;border-radius:6px;background:#31be2d;color:#fff;font-size:17px;text-align:center;line-height:28px;font-weight:bold;flex:none}
+.chip3{display:inline-flex;align-items:center;gap:10px;color:#3d63d6;font-weight:bold;vertical-align:middle}
+.chip3 b{width:36px;height:36px;border-radius:8px;background:#31be2d;color:#fff;font-size:20px;text-align:center;line-height:36px;flex:none}
+.gfoot{position:absolute;left:0;right:0;top:480px;bottom:0;background:linear-gradient(to bottom,rgba(252,252,252,0),#fcfcfc 22px)}
+/* 会話 */
+.cv{position:absolute;left:0;top:0;right:0;height:2400px}
+.ub{position:absolute;right:34px;background:#ece5fb;border-radius:26px;display:flex;align-items:center;gap:12px;font-size:30px;padding:12px 28px;white-space:nowrap}
+.ub .chip3 b{width:34px;height:34px;line-height:34px;background:#c41818}
+.gl{position:absolute;left:40px;width:790px}
+.gl i{display:block;height:22px;border-radius:11px;background:#e6e6e6;margin-bottom:16px}
+.at{position:absolute;left:40px;width:790px;font-size:28px;line-height:1.5}
+.ah{font-size:28px;font-weight:bold;margin-bottom:8px}
+#oldA{position:absolute;left:0;right:0;top:0;height:740px}
+#ubA1{top:24px}#aiA1{top:110px}#ubA2{top:260px}#aiA2{top:346px}#ubA3{top:534px}#aiA3{top:620px}
+#ubA4{top:790px;opacity:0}#ansA{top:870px;opacity:0}
+/* 枠（コードの枠＝右上にコピー） */
+.frm{position:absolute;left:40px;width:790px;border:1px solid #dedede;border-radius:16px;background:#fff;overflow:hidden;opacity:0}
+.frm .fh{height:50px;background:#f3f3f3;display:flex;align-items:center;justify-content:space-between;padding:0 16px 0 22px;font-size:21px;color:#666}
+.cpy{display:flex;align-items:center;gap:8px;font-size:22px;color:#333;padding:6px 12px;border-radius:10px;white-space:nowrap}
+.cpy svg{display:block}
+.frm .fb{padding:16px 22px;font-size:22px;line-height:1.55;white-space:nowrap}
+.frm .fb div{overflow:hidden;text-overflow:ellipsis}
+.frm .fb b{font-weight:bold}
+.gb{display:inline-block;width:170px;height:18px;border-radius:9px;background:#d8d8d8;vertical-align:middle;margin-left:8px}
+#frameA{top:975px}
+#howA{top:1450px;opacity:0}
+#howA .hl{font-size:26px;height:44px;display:flex;align-items:center}
+#nextA{top:1660px;opacity:0}
+.nq{display:flex;align-items:center;gap:16px;font-size:28px;height:62px;opacity:0;white-space:nowrap}
+.nq b{width:46px;height:46px;border-radius:50%;background:#c41818;color:#fff;font-size:26px;text-align:center;line-height:46px;flex:none}
+#nqF{font-size:24px;color:#555;margin-top:6px;opacity:0}
+#ubA5{top:1990px;opacity:0}
+#shortA{top:2070px;opacity:0}
+#shortA .frm{position:relative;left:0;top:10px;opacity:1}
+/* 新しいチャットの会話 */
+#ubB1{top:24px;opacity:0;display:block;width:640px;white-space:normal;font-size:24px;line-height:1.5;padding:14px 26px;max-height:140px;overflow:hidden}
+#ubB1 div{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#ubB1:after{content:"";position:absolute;left:0;right:0;bottom:0;height:40px;border-radius:0 0 26px 26px;background:linear-gradient(to bottom,rgba(236,229,251,0),#ece5fb)}
+#ansB1{top:196px;font-weight:bold;font-size:30px;opacity:0}
+#ansB2{top:266px;opacity:0}
+#chkB{position:absolute;left:40px;top:326px;display:flex;align-items:center;gap:12px;background:#eef6ee;border:2px solid #c3e0c3;border-radius:12px;padding:8px 18px;font-size:26px;white-space:nowrap;opacity:0}
+#chkB svg{display:block;flex:none}
+#contB{top:416px;opacity:0}
+#contB .gl{position:relative;left:0;margin-top:12px}
+#imgNote{position:absolute;right:22px;bottom:15px;font-size:19px;color:#6b6460;opacity:0}
+#toast{position:absolute;opacity:0}
+/* 大きなカード（下の端 750） */
+.big{left:310px;top:36px;width:1300px;height:714px;background:#fff;border-radius:30px;box-shadow:0 18px 50px rgba(0,0,0,.10);padding:34px 90px}
+.big .k{font-size:34px;color:#c41818;font-weight:bold;text-align:center}
+.big .t{font-size:66px;text-align:center;margin-top:4px;white-space:nowrap}
+.big .bar{width:90px;height:6px;background:#c41818;margin:16px auto 24px;border-radius:3px}
+.big .note{position:absolute;right:30px;bottom:16px;font-size:20px;color:#8a817a}
+/* 1枚に残すこと：引継ぎの1枚 */
+#sheetCard{left:260px;width:1400px;padding:20px 60px 26px}
+#sheet{position:relative;border:2px solid #dedede;border-radius:18px;overflow:hidden;margin-top:20px}
+#sheet .fh{height:54px;background:#f3f3f3;display:flex;align-items:center;justify-content:space-between;padding:0 20px 0 26px;font-size:24px;color:#666}
+#sheet .cpy{font-size:24px}
+#sheet .bd{padding:14px 26px 12px}
+#sheet .h1{font-size:30px;font-weight:bold;height:44px;display:flex;align-items:center;white-space:nowrap}
+#sheet .h2{font-size:23px;color:#777;height:34px;display:flex;align-items:center;white-space:nowrap}
+.row{display:grid;grid-template-columns:320px 1fr;align-items:center;height:52px;font-size:27px;white-space:nowrap}
+.row .lb{justify-self:start;font-weight:bold;font-size:25px;color:#444;background:#efefef;border-radius:10px;padding:5px 14px}
+.row.on .lb{background:#c41818;color:#fff}
+.row .v{opacity:0;overflow:hidden}
+.row .v span{opacity:0}
+.mk{background:linear-gradient(transparent 55%,#ffe27a 55%)}
+/* いつ引き継ぐか */
+.sig{display:flex;align-items:center;gap:30px;height:96px;margin-left:110px;opacity:0}
+.sig .n{width:72px;height:72px;border-radius:50%;background:#fff4f4;border:4px solid #e8b4b4;color:#c41818;font-size:44px;font-weight:bold;text-align:center;line-height:64px;flex:none}
+.sig .w{font-size:50px;font-weight:bold;white-space:nowrap}
+#stamp{position:absolute;left:0;right:0;top:546px;text-align:center;opacity:0}
+#stamp span{display:inline-block;background:#c41818;color:#fff;border-radius:22px;padding:14px 60px;font-size:68px;font-weight:bold;box-shadow:0 10px 30px rgba(196,24,24,.25)}
+/* 右の説明のカード */
+.co{left:1262px;top:230px;width:590px;background:#fff;border-radius:22px;box-shadow:0 12px 36px rgba(0,0,0,.10);border-left:12px solid #c41818;padding:30px 34px}
+.co .k{font-size:28px;color:#c41818;font-weight:bold;margin-bottom:6px}
+.co .b{font-size:50px;font-weight:bold;line-height:1.4}
+.co .s{font-size:30px;color:#555;margin-top:12px;line-height:1.5}
+/* 赤い枠・指 */
+#ring{left:0;top:0;border:7px solid #c41818;border-radius:24px;box-shadow:0 0 0 8px rgba(196,24,24,.18)}
+#cur{left:0;top:0;width:54px;height:54px}
+#rip{left:0;top:0;width:90px;height:90px;border-radius:50%;border:6px solid #c41818}
+/* まとめ */
+.srow{display:flex;align-items:center;gap:36px;margin:40px 0 0 120px;opacity:0}
+.srow .n{width:92px;height:92px;border-radius:50%;background:#c41818;color:#fff;font-size:52px;font-weight:bold;text-align:center;line-height:92px;flex:none}
+.srow .w{font-size:62px;font-weight:bold;white-space:nowrap}
+#end{left:0;top:0;width:1920px;height:1080px;background:#e9e6e3;text-align:center}
+#end img{width:150px;height:150px;border-radius:30px;margin-top:220px}
+#end .t{font-size:84px;font-weight:bold;margin-top:30px;white-space:nowrap}
+#end .s{font-size:44px;color:#555;margin-top:18px}
+</style>
+</head>
+<body>
+<!-- はじめに -->
+<div class="L" id="introCard"><img src="assets/huya.png" alt=""><div class="t1">フヤセルAI【会話引継ぎ】</div><div class="t2">で、できること</div><div class="bar"></div></div>
+<div class="L" id="qCard">
+  <svg width="200" height="210" viewBox="0 0 200 210"><rect x="8" y="8" width="184" height="190" rx="18" fill="#fbf8f4" stroke="#d9cfc4" stroke-width="5"/>
+    <rect x="64" y="30" width="110" height="26" rx="13" fill="#d9cdf3"/><rect x="26" y="68" width="130" height="16" rx="8" fill="#dcdcdc"/><rect x="26" y="92" width="100" height="16" rx="8" fill="#dcdcdc"/>
+    <rect x="80" y="122" width="94" height="26" rx="13" fill="#d9cdf3"/><rect x="26" y="160" width="140" height="16" rx="8" fill="#dcdcdc"/>
+    <text x="150" y="118" font-size="64" font-weight="bold" fill="#c41818" font-family="BIZ UDPGothic,Yu Gothic,sans-serif">?</text></svg>
+  <div class="k" id="qK">そんな時に</div>
+  <div class="q" id="q1">「会話が長くなって、答えがずれてきた」</div>
+  <div class="q" id="q2">「前に話した持ち株を、また聞かれた」</div>
+</div>
+<div class="L" id="ansPill"><span><i></i>引継ぎの1枚を、ChatGPTが作ります</span></div>
+
+<!-- パソコンの画面の絵 -->
+<div class="L" id="br">
+  <div class="top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><div class="tab"><span class="ti"></span><span class="tn">ChatGPT</span></div><div id="imgNote">画面はイメージです</div></div>
+  <div class="body">
+    <!-- 長くなった相談の会話（ここで＋から選ぶ・番号で続きも） -->
+    <div class="scr" id="sOld">
+      <div class="gside"><div class="ttl">ChatGPT</div>
+        <div class="it"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M4 21 L4 17 L16 5 L20 9 L8 21 Z M14 7 L18 11" fill="none" stroke="#333" stroke-width="2.2" stroke-linejoin="round"/></svg><span>新しいチャット</span></div>
+        <div class="rl">最近</div><i style="width:80%"></i><i style="width:62%"></i><i style="width:74%"></i><i style="width:55%"></i></div>
+      <div class="gmain">
+        <div class="cv" id="cvA">
+          <div id="oldA">
+            <div class="ub" id="ubA1">〇〇〇〇を100株、〇,〇〇〇円で持っています</div>
+            <div class="gl" id="aiA1"><i style="width:96%"></i><i style="width:88%"></i><i style="width:64%"></i></div>
+            <div class="ub" id="ubA2">決算の発表まで、どうしたらいい？</div>
+            <div class="gl" id="aiA2"><i style="width:92%"></i><i style="width:97%"></i><i style="width:84%"></i><i style="width:58%"></i></div>
+            <div class="ub" id="ubA3">手仕舞いの値は、いくらがいい？</div>
+            <div class="gl" id="aiA3"><i style="width:94%"></i><i style="width:86%"></i><i style="width:70%"></i></div>
+          </div>
+          <div class="ub" id="ubA4"><span class="chip3"><b>フ</b>フヤセルAI【会話引継ぎ】</span></div>
+          <div class="at" id="ansA">この会話の引継ぎの1枚です。下の枠の中を、<br>新しいチャットにそのまま貼ってください。</div>
+          <div class="frm" id="frameA"><div class="fh"><span>引継ぎの1枚</span><span class="cpy" id="copyA"></span></div>
+            <div class="fb">
+              <div><b>【引継ぎの1枚】（作った日：2026年11月25日）</b></div>
+              <div>新しいチャットへのお願い：これは前の会話の引継ぎです。…</div>
+              <div>相談の目的：持ち株〇〇〇〇を、この先どうするか決める</div>
+              <div>使っていたプラグイン：フヤセルAI【PRO】</div>
+              <div>決まったこと：・決算の発表までは、今の株数のまま</div>
+              <div>教えてもらったこと：100株・買値〇,〇〇〇円・使えるお金〇〇万円</div>
+              <div>銘柄ごとの今の状態：〇〇〇〇　最後の判断<span class="gb"></span></div>
+              <div>調べた数字：終値〇,〇〇〇円（11月25日に確かめた）</div>
+              <div>まだ決まっていないこと：・手仕舞いの値をいくらにするか</div>
+              <div>最初にやること：1. 株価を最新に確かめ直す</div>
+            </div></div>
+          <div class="at" id="howA"><div class="ah">新しいチャットでの続け方</div>
+            <div class="hl">1. 新しいチャットを開く</div><div class="hl">2. 使っていたプラグインを、＋から選ぶ</div><div class="hl">3. 枠の中を貼って、送信の↑を押す</div></div>
+          <div class="at" id="nextA"><div class="ah" style="margin-bottom:14px">次に聞くと良いこと</div>
+            <div id="nqsA">
+              <div class="nq" id="nq1"><b>1</b>引継ぎの1枚を、もっと短くして</div>
+              <div class="nq" id="nq2"><b>2</b>この会話で決まったことだけ、一覧にして</div>
+              <div class="nq" id="nq3"><b>3</b>新しいチャットでの貼り方を教えて</div>
+            </div>
+            <div id="nqF">番号だけ送れば、続きを答えます</div></div>
+          <div class="ub" id="ubA5">1</div>
+          <div class="at" id="shortA">短い1枚です。
+            <div class="frm"><div class="fh"><span>引継ぎの1枚（短く）</span><span class="cpy"><svg width="22" height="22" viewBox="0 0 22 22"><rect x="7" y="7" width="12" height="12" rx="2.5" fill="none" stroke="#555" stroke-width="2"/><path d="M4 14 V5 a2 2 0 0 1 2 -2 H14" fill="none" stroke="#555" stroke-width="2"/></svg>コピー</span></div>
+              <div class="fb">
+                <div>相談の目的：持ち株〇〇〇〇を、この先どうするか決める</div>
+                <div>銘柄ごとの今の状態：〇〇〇〇　最後の判断<span class="gb"></span></div>
+                <div>最初にやること：1. 株価を最新に確かめ直す</div>
+              </div></div></div>
+        </div>
+        <div class="gfoot"></div>
+        <div class="pmenu" id="pMenuA">
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M17 8 L9.5 15.5 a2.5 2.5 0 0 0 3.5 3.5 L20.5 11.5 a5 5 0 0 0 -7 -7 L6 12 a7 7 0 0 0 10 10 L22 16" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/></svg><span>写真やファイルを追加</span><span class="d">コンピューターからアップロード</span></div>
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><rect x="2" y="2" width="22" height="22" rx="5" fill="#5ab0f0"/><circle cx="17" cy="9" r="3.5" fill="#ffd34d"/><path d="M2 20 L10 12 L18 20 L24 15 L24 24 L2 24 Z" fill="#3a8fd6"/></svg><span>画像を作成</span><span class="d">何でも視覚化</span></div>
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="10" fill="none" stroke="#22a6d8" stroke-width="2.2"/><ellipse cx="13" cy="13" rx="4.5" ry="10" fill="none" stroke="#22a6d8" stroke-width="2"/><path d="M3 13 H23" stroke="#22a6d8" stroke-width="2"/></svg><span>ウェブ検索</span><span class="d">リアルタイムのニュースや情報を検索</span></div>
+          <div class="pmi"><span class="ic">フ</span><span>フヤセルAI【PRO】</span></div>
+          <div class="pmi" id="pItemA"><span class="ic">フ</span><span>フヤセルAI【会話引継ぎ】</span></div>
+        </div>
+        <div class="gpill" id="gInA"><span class="pl" id="gPlusA">＋</span><span class="tx" id="inA"></span><span class="md" style="font-size:24px;color:#999">Medium ⌄</span><span class="send" id="gSendA"><svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 26 V5 M6 13 L15 4 L24 13" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      </div>
+    </div>
+    <!-- 新しいチャット：貼って送る -->
+    <div class="scr" id="sNew">
+      <div class="gside"><div class="ttl">ChatGPT</div>
+        <div class="it"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M4 21 L4 17 L16 5 L20 9 L8 21 Z M14 7 L18 11" fill="none" stroke="#333" stroke-width="2.2" stroke-linejoin="round"/></svg><span>新しいチャット</span></div>
+        <div class="rl">最近</div><i style="width:80%"></i><i style="width:62%"></i><i style="width:74%"></i><i style="width:55%"></i></div>
+      <div class="gmain">
+        <div class="gtog"><div class="on">Chat</div><div>Work</div></div>
+        <div class="ghead" style="top:200px">準備ができたらどうぞ。</div>
+        <div class="gpill" id="gInN"><span class="pl">＋</span><span class="tx" id="inN"></span><span class="md" style="font-size:24px;color:#999">Medium ⌄</span><span class="send" id="gSendN"><svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 26 V5 M6 13 L15 4 L24 13" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      </div>
+    </div>
+    <!-- 新しいチャットの会話：受け取って続きから -->
+    <div class="scr" id="sConvB">
+      <div class="gside"><div class="ttl">ChatGPT</div>
+        <div class="it"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M4 21 L4 17 L16 5 L20 9 L8 21 Z M14 7 L18 11" fill="none" stroke="#333" stroke-width="2.2" stroke-linejoin="round"/></svg><span>新しいチャット</span></div>
+        <div class="rl">最近</div><i style="width:70%"></i><i style="width:80%"></i><i style="width:62%"></i><i style="width:74%"></i></div>
+      <div class="gmain">
+        <div class="cv" id="cvB">
+          <div class="ub" id="ubB1"><div>【引継ぎの1枚】（作った日：2026年11月25日）</div><div>新しいチャットへのお願い：これは前の会話の引継ぎです。…</div><div>相談の目的：持ち株〇〇〇〇を、この先どうするか決める</div></div>
+          <div class="at" id="ansB1">引継ぎを受け取りました。</div>
+          <div class="at" id="ansB2">相談の目的と、最初にやることを確かめました。</div>
+          <div id="chkB"><svg width="30" height="30" viewBox="0 0 30 30"><circle cx="15" cy="15" r="13" fill="#2f9e44"/><path d="M8 15.5 L13 20 L22 10" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"/></svg>株価を最新に確かめ直しました（11月26日）：〇,〇〇〇円</div>
+          <div class="at" id="contB">では、前の続きから答えます。
+            <div class="gl"><i style="width:95%"></i><i style="width:87%"></i><i style="width:66%"></i></div></div>
+        </div>
+        <div class="gfoot"></div>
+        <div class="pmenu" id="pMenuB">
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M17 8 L9.5 15.5 a2.5 2.5 0 0 0 3.5 3.5 L20.5 11.5 a5 5 0 0 0 -7 -7 L6 12 a7 7 0 0 0 10 10 L22 16" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/></svg><span>写真やファイルを追加</span><span class="d">コンピューターからアップロード</span></div>
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><rect x="2" y="2" width="22" height="22" rx="5" fill="#5ab0f0"/><circle cx="17" cy="9" r="3.5" fill="#ffd34d"/><path d="M2 20 L10 12 L18 20 L24 15 L24 24 L2 24 Z" fill="#3a8fd6"/></svg><span>画像を作成</span><span class="d">何でも視覚化</span></div>
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="10" fill="none" stroke="#22a6d8" stroke-width="2.2"/><ellipse cx="13" cy="13" rx="4.5" ry="10" fill="none" stroke="#22a6d8" stroke-width="2"/><path d="M3 13 H23" stroke="#22a6d8" stroke-width="2"/></svg><span>ウェブ検索</span><span class="d">リアルタイムのニュースや情報を検索</span></div>
+          <div class="pmi" id="pItemB"><span class="ic">フ</span><span>フヤセルAI【PRO】</span></div>
+          <div class="pmi"><span class="ic">フ</span><span>フヤセルAI【会話引継ぎ】</span></div>
+        </div>
+        <div class="gpill" id="gInB"><span class="pl" id="gPlusB">＋</span><span class="tx" id="inB"></span><span class="md" style="font-size:24px;color:#999">Medium ⌄</span><span class="send"><svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 26 V5 M6 13 L15 4 L24 13" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 右の説明 -->
+<div class="L co" data-a="6" data-b="9"><div class="k">使い方</div><div class="b">「＋」から選んで</div><div class="s">何も打たずに、<br>送信の↑を押すだけ</div></div>
+<div class="L co" data-a="10" data-b="10"><div class="k">返ってくるのは</div><div class="b">引継ぎの<br>1枚</div><div class="s">枠の右上に<br>コピーのボタン</div></div>
+<div class="L co" data-a="17" data-b="18"><div class="k">続け方</div><div class="b">コピーして、<br>貼って送る</div><div class="s">新しいチャットに</div></div>
+<div class="L co" data-a="19" data-b="21"><div class="k">新しいチャットは</div><div class="b">続きから<br>答える</div><div class="s">数字は最新に<br>確かめ直す</div></div>
+<div class="L co" data-a="22" data-b="23"><div class="k">使っていたフヤセルAIも</div><div class="b">「＋」から<br>選び直す</div><div class="s">同じ考え方で続く</div></div>
+<div class="L co" data-a="28" data-b="29"><div class="k">1枚の後に</div><div class="b">次に聞くと<br>良いこと</div><div class="s">3つ</div></div>
+<div class="L co" data-a="30" data-b="31"><div class="k">続きは番号で</div><div class="b">番号を<br>送るだけ</div><div class="s">「1」なら、<br>もっと短い1枚に</div></div>
+
+<!-- 1枚に残すこと -->
+<div class="L big" id="sheetCard"><div class="k">1枚に残すこと</div>
+  <div id="sheet"><div class="fh"><span>引継ぎの1枚</span><span class="cpy"><svg width="24" height="24" viewBox="0 0 22 22"><rect x="7" y="7" width="12" height="12" rx="2.5" fill="none" stroke="#555" stroke-width="2"/><path d="M4 14 V5 a2 2 0 0 1 2 -2 H14" fill="none" stroke="#555" stroke-width="2"/></svg>コピー</span></div>
+    <div class="bd">
+      <div class="h1">【引継ぎの1枚】（作った日：2026年11月25日）</div>
+      <div class="h2">新しいチャットへのお願い：これは前の会話の引継ぎです。数字は最新に確かめ直してください。</div>
+      <div class="row" id="r1"><span class="lb">相談の目的</span><div class="v">持ち株〇〇〇〇を、この先どうするか決める</div></div>
+      <div class="row" id="r2"><span class="lb">使っていたプラグイン</span><div class="v">フヤセルAI【PRO】</div></div>
+      <div class="row" id="r3"><span class="lb">決まったこと</span><div class="v">・決算の発表までは、今の株数のまま</div></div>
+      <div class="row" id="r4"><span class="lb">教えてもらったこと</span><div class="v"><span id="r4a">持ち株 〇〇〇〇 100株</span><span id="r4b">・買値 〇,〇〇〇円</span><span id="r4c">・使えるお金 〇〇万円</span></div></div>
+      <div class="row" id="r5"><span class="lb">銘柄ごとの今の状態</span><div class="v">〇〇〇〇　最後の判断<span class="gb" style="width:260px;height:22px;border-radius:11px"></span></div></div>
+      <div class="row" id="r6"><span class="lb">調べた数字</span><div class="v">終値 〇,〇〇〇円<span id="r6d">（11月25日に確かめた）</span></div></div>
+      <div class="row" id="r7"><span class="lb">まだ決まっていないこと</span><div class="v">・手仕舞いの値をいくらにするか</div></div>
+      <div class="row" id="r8"><span class="lb">最初にやること</span><div class="v">1. 株価を最新に確かめ直す　2. …</div></div>
+    </div></div>
+  <div class="note">画面はイメージです</div>
+</div>
+<!-- いつ引き継ぐか -->
+<div class="L big" id="whenCard"><div class="k">いつ引き継ぐか</div><div class="t min">こんな合図が出たら</div><div class="bar"></div>
+  <div class="sig" id="sg1"><div class="n">!</div><div class="w">前に決めたことを、忘れている</div></div>
+  <div class="sig" id="sg2"><div class="n">!</div><div class="w">同じことを、何度も聞かれる</div></div>
+  <div class="sig" id="sg3"><div class="n">!</div><div class="w">答えがずれる・遅くなる</div></div>
+  <div id="stamp"><span>引き継ぎどき</span></div>
+</div>
+<!-- まとめ -->
+<div class="L big" id="sumCard"><div class="k">まとめ</div><div class="t min">大事なことは、1枚で引き継げる</div><div class="bar"></div>
+  <div class="srow" id="sr1"><div class="n">1</div><div class="w">「＋」から選ぶ</div></div>
+  <div class="srow" id="sr2"><div class="n">2</div><div class="w">何も打たずに送る</div></div>
+  <div class="srow" id="sr3"><div class="n">3</div><div class="w">新しいチャットに貼る</div></div>
+</div>
+<div class="L" id="end"><img src="assets/huya.png" alt=""><div class="t">フヤセルAI【会話引継ぎ】</div><div class="s">長い相談の味方に</div></div>
+
+<div class="L" id="ring"></div>
+<div class="L" id="rip"></div>
+<div class="L" id="cur"><svg width="54" height="54" viewBox="0 0 54 54"><path d="M8 4 L8 44 L18 34 L26 50 L34 46 L26 31 L41 31 Z" fill="#111" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/></svg></div>
+<div class="L" id="lab"><span class="pill">フヤセルAI【会話引継ぎ】</span><span id="labT"></span></div>
+<div class="L" id="sub"><span id="subT"></span></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const cl = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const eo = x => 1 - Math.pow(1 - cl(x), 3);
+const eio = x => { x = cl(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const win = (t, a, b, fi = .35, fo = .35) => Math.max(0, Math.min(eo((t - a) / fi), eo((b - t) / fo)));
+function S(el, o, x = 0, y = 0, s = 1) { el.style.opacity = o.toFixed(3); el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${s.toFixed(4)})`; }
+function up(sel, a, d = 14, dur = .35) { const k = eo((T0 - a) / dur); S($(sel), k, 0, (1 - k) * d); return k; }
+let TL, CAP, CH, M, T0 = 0;
+const cs = i => CAP[i].start, ce = i => CAP[i].end;
+function rectOf(sel) { const r = $(sel).getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height, cx: r.left + r.width / 2, cy: r.top + r.height / 2 }; }
+let RINGS, CURP, CURV, CLICKS, T, SCRA, SCRB;
+const N0 = 'はじめに', N1 = '使い方', N2 = '1枚に残すこと', N3 = '貼るだけで続きから', N4 = 'いつ引き継ぐか', N5 = '番号で続きも', N6 = 'まとめ';
+const COPY = '<svg width="22" height="22" viewBox="0 0 22 22"><rect x="7" y="7" width="12" height="12" rx="2.5" fill="none" stroke="#555" stroke-width="2"/><path d="M4 14 V5 a2 2 0 0 1 2 -2 H14" fill="none" stroke="#555" stroke-width="2"/></svg>コピー';
+const COPIED = '<svg width="22" height="22" viewBox="0 0 22 22"><path d="M4 11.5 L9 16 L18 6" fill="none" stroke="#2f9e44" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>コピーしました';
+function setup() {
+  CAP = {}; TL.captions.forEach(c => CAP[c.i] = c);
+  CH = {}; TL.chapters.forEach(c => CH[c.name] = c);
+  M = TL.marks;
+  // 押す時刻
+  T = { plus: M.plus + .25, pick: M.pick + .45, push: M.push + .1, copy: M.copy + .25, paste: M.hatte - .1, send6: M.okuru + .35,
+        plus2: M.plus2 + .2, pick2: M.onaji + .1, send7: M.ichi + .8 };
+  // [部品, 出す, 消す, 会話の中の部品＝見えている所で切る, 余白（無ければ16・[横, 縦]も可＝すぐ下に字がある所は縦を詰める）]
+  // ★メニューの項目の枠は、メニューと同じ時刻（選んで0.15秒後）に消す＝枠だけ残ると中身の無い赤い箱に見える（2026-11-26）
+  RINGS = [['#oldA', cs(7) + .05, cs(8) - .25, 1], ['#gInA', cs(8) - .2, M.plus - .3], ['#gPlusA', M.plus - .35, T.plus + .3], ['#pItemA', T.plus + .3, T.pick + .15, 0, [12, 2]],
+           ['#gInA', M.nani - .1, M.arrow - .2], ['#gSendA', M.arrow - .1, T.push + .35], ['#frameA', M.waku - .35, ce(10), 1],
+           ['#copyA', M.migiue - .2, T.copy + .45], ['#gSendN', T.paste + .15, T.send6 + .35],
+           ['#ansB1', M.uketori - .5, ce(19) - .1, 1, [16, 8]], ['#chkB', M.saishin - .25, ce(20), 1], ['#contB', M.tsuzuki - .15, ce(21), 1],
+           ['#gPlusB', M.tsukatte - .1, T.plus2 + .3], ['#pItemB', T.plus2 + .3, T.pick2 + .15, 0, [12, 2]], ['#gInB', T.pick2 + .4, ce(23)],
+           ['#nqsA', M.mittsu - .45, M.ichi - .45, 1], ['#gInA', M.ichi - .4, T.send7 - .25], ['#gSendA', T.send7 - .3, T.send7 + .35], ['#shortA', M.mijikai - .15, ce(30), 1]];
+  CURP = [[cs(8) - .3, [760, 640]], [T.plus - .5, '#gPlusA'], [T.plus + .1, '#gPlusA'], [T.pick - .45, '#pItemA'], [T.pick + .15, '#pItemA'],
+          [M.arrow - .6, '#gSendA'], [T.push + .3, '#gSendA'],
+          [cs(17) - .1, [960, 560]], [T.copy - .5, '#copyA'], [T.copy + .15, '#copyA'], [T.paste - .45, '#gInN'], [T.paste, '#gInN'], [T.send6 - .35, '#gSendN'], [T.send6 + .3, '#gSendN'],
+          [M.tsukatte - .2, [760, 640]], [T.plus2 - .5, '#gPlusB'], [T.plus2 + .1, '#gPlusB'], [T.pick2 - .45, '#pItemB'], [T.pick2 + .15, '#pItemB'],
+          [M.ichi - .5, [900, 640]], [T.send7 - .5, '#gSendA'], [T.send7 + .3, '#gSendA']];
+  CURV = [[cs(8) - .3, T.push + .6], [cs(17) - .1, T.send6 + .6], [M.tsukatte - .2, T.pick2 + .6], [M.ichi - .5, T.send7 + .6]];
+  CLICKS = [[T.plus, '#gPlusA'], [T.pick, '#pItemA'], [T.push, '#gSendA'], [T.copy, '#copyA'], [T.paste, '#gInN'], [T.send6, '#gSendN'],
+            [T.plus2, '#gPlusB'], [T.pick2, '#pItemB'], [T.send7, '#gSendA']];
+  // 会話を上へ送る（その時刻に、その位置へ・かける秒）
+  const c2 = CH[N2], c4 = CH[N4];
+  SCRA = [[cs(6) + .3, 300, 2.0], [T.push + .1, 770, .55], [c2.gap_start + 1.2, 955, .1], [c4.gap_start + 1.2, 1400, .1], [M.mittsu - .9, 1640, .55], [T.send7 + .1, 1970, .55]];
+  SCRB = [[M.tsuzuki - .5, 150, .55]];
+}
+function chapterAt(t) { let c = TL.chapters[0]; for (const x of TL.chapters) if (t >= x.gap_start) c = x; return c; }
+function typed(s, t, a, cps = 9) { const n = Math.floor(cl((t - a) * cps, 0, [...s].length)); return [...s].slice(0, n).join(''); }
+const caret = t => (Math.floor(t * 2) % 2 ? '<span class="caret"></span>' : '');
+const ph = t => (caret(t) || '<span style="color:#aaa">質問してみましょう</span>');
+function scroll(list, t) { let y = 0, prev = 0; for (const [a, to, d] of list) { if (t < a) { y = prev; break; } y = prev + (to - prev) * eio((t - a) / d); prev = to; } return y; }
+function render(t) {
+  T0 = t;
+  const c1 = CH[N1], c2 = CH[N2], c3 = CH[N3], c4 = CH[N4], c5 = CH[N5], c6 = CH[N6];
+  const now = chapterAt(t);
+  // ---- はじめに
+  const iOut = cs(2) - .55;
+  S($('#introCard'), win(t, .15, iOut + .4, .6, .4), 0, (1 - eo((t - .15) / .7)) * 40 - eo((t - iOut) / .4) * 60);
+  const qa = cs(2) - .12, qb = c1.gap_start + .25;
+  S($('#qCard'), win(t, qa, qb, .45, .4), 0, (1 - eo((t - qa) / .5)) * 40);
+  { const k1 = eo((t - qa - .05) / .4), k2 = eo((t - cs(3) + .1) / .4);
+    S($('#q1'), k1, (1 - k1) * 20, 0); S($('#q2'), k2, (1 - k2) * 20, 0); }
+  $('#qK').style.opacity = eo((t - cs(4)) / .4).toFixed(3);
+  S($('#ansPill'), win(t, cs(4) + .4, qb, .45, .4), 0, (1 - eo((t - cs(4) - .4) / .45)) * 26);
+  // ---- 大きなカード（出ている間は後ろの画面を隠す）
+  const sa = c2.gap_start + .2, sb = c3.gap_start + .35, wa = c4.gap_start + .2, wb = c5.gap_start + .35;
+  const sO = win(t, sa, sb, .45, .35), wO = win(t, wa, wb, .45, .35);
+  const jo = Math.max(sO, wO);
+  // ---- パソコンの画面
+  const brA = c1.gap_start + .15, brB = c6.gap_start + .1;
+  S($('#br'), win(t, brA, brB, .5, .5) * (1 - jo), 0, (1 - eo((t - brA) / .6)) * 30);
+  const swN = T.paste - .55, swB = T.send6 + .35;   // 長い会話 → 新しいチャット → 新しいチャットの会話
+  const oldOn = (t < swN) || (t >= c4.gap_start + .7);
+  $('#sOld').style.opacity = (t < swN ? 1 - eo((t - swN + .16) / .16) : (t >= c4.gap_start + .7 ? 1 : 0)).toFixed(3);
+  $('#sNew').style.opacity = (t >= swN - .16 && t < swB + .08 ? win(t, swN - .16, swB + .08, .16, .16) : 0).toFixed(3);
+  $('#sConvB').style.opacity = (t >= swB - .08 && t < c4.gap_start + .7 ? win(t, swB - .08, c4.gap_start + .7, .16, .1) : 0).toFixed(3);
+  // 長い会話：＋ → 一覧 → 選ぶ → 何も打たずに↑ → 引継ぎの1枚
+  S($('#pMenuA'), win(t, T.plus + .1, T.pick + .15, .25, .2), 0, (1 - eo((t - T.plus - .1) / .25)) * 10);
+  $('#pItemA').style.background = (t >= T.pick - .55 && t < T.pick + .15) ? '#f1f1f1' : 'transparent';
+  const chipK = '<span class="chip3"><b>フ</b>フヤセルAI【会話引継ぎ】</span>';
+  $('#inA').innerHTML = (t >= T.pick + .15 && t < T.push + .05) ? chipK + caret(t)
+                      : (t >= M.ichi - .4 && t < T.send7 + .05) ? typed('1', t, M.ichi - .4, 5) + caret(t) : ph(t);
+  S($('#ubA4'), eo((t - T.push - .15) / .3), 0, 0);
+  up('#ansA', T.push + .55);
+  $('#frameA').style.opacity = eo((t - T.push - .8) / .35).toFixed(3);
+  $('#copyA').innerHTML = (t >= T.copy + .05 && t < c4.gap_start) ? COPIED : COPY;
+  $('#howA').style.opacity = eo((t - T.push - 1.2) / .35).toFixed(3);
+  $('#nextA').style.opacity = eo((t - T.push - 1.4) / .35).toFixed(3);
+  [1, 2, 3].forEach(i => { const a = (t < c4.gap_start ? T.push + 1.5 : M.mittsu - .6) + (i - 1) * .2, k = t < c4.gap_start ? eo((t - T.push - 1.5) / .3) : eo((t - a) / .3);
+    S($('#nq' + i), k, (1 - k) * -16, 0); });
+  $('#nqF').style.opacity = (t < c4.gap_start ? eo((t - T.push - 1.6) / .3) : eo((t - M.mittsu) / .3)).toFixed(3);
+  S($('#ubA5'), eo((t - T.send7 - .25) / .3), 0, 0);
+  up('#shortA', T.send7 + .6);
+  $('#cvA').style.transform = `translateY(${(-scroll(SCRA, t)).toFixed(1)}px)`;
+  // 新しいチャット：貼って送る
+  $('#inN').innerHTML = (t >= T.paste && t < T.send6 + .05) ? '【引継ぎの1枚】（作った日：2026年11月25日）新しいチャットへのお願い：…' + caret(t) : ph(t);
+  // 新しいチャットの会話：受け取りました → 確かめ直し → 続きから → ＋で【PRO】
+  S($('#ubB1'), eo((t - T.send6 - .55) / .3), 0, 0);
+  up('#ansB1', M.uketori - .6);
+  up('#ansB2', M.uketori + .3);
+  up('#chkB', M.saishin - .3);
+  up('#contB', M.tsuzuki - .3);
+  $('#cvB').style.transform = `translateY(${(-scroll(SCRB, t)).toFixed(1)}px)`;
+  S($('#pMenuB'), win(t, T.plus2 + .1, T.pick2 + .15, .25, .2), 0, (1 - eo((t - T.plus2 - .1) / .25)) * 10);
+  $('#pItemB').style.background = (t >= T.pick2 - .55 && t < T.pick2 + .15) ? '#f1f1f1' : 'transparent';
+  $('#inB').innerHTML = t >= T.pick2 + .15 ? '<span class="chip3"><b>フ</b>フヤセルAI【PRO】</span>' + caret(t) : ph(t);
+  $('#imgNote').style.opacity = win(t, brA + .3, brB, .3, .3).toFixed(3);
+  // ---- 右の説明
+  for (const el of document.querySelectorAll('.co')) {
+    const a = cs(+el.dataset.a) - .05, b = ce(+el.dataset.b) - .05;
+    S(el, win(t, a, b, .35, .3), (1 - eo((t - a) / .4)) * 40, 0);
+  }
+  // ---- 1枚に残すこと（見出しが上から光る・値が出る）
+  S($('#sheetCard'), sO, 0, (1 - eo((t - sa) / .5)) * 30);
+  const lit = [['#r1', M.mokuteki - .15], ['#r2', M.mokuteki + .35], ['#r3', M.kimatta - .15], ['#r4', M.mochi - .2], ['#r5', M.handan - .2],
+               ['#r7', M.mada - .15], ['#r8', M.saisho - .15], ['#r6', cs(15) - .1]];
+  const order = lit.map(x => x[1]);
+  lit.forEach(([s, a], i) => {
+    const k = eo((t - a) / .35);
+    $(s + ' .v').style.opacity = k.toFixed(3);
+    const nx = order.filter(x => x > a).sort((p, q) => p - q)[0] ?? 1e9;
+    const on = (t >= a && t < nx) || (t >= M.wakete - .2);
+    $(s).classList.toggle('on', on);
+  });
+  [['#r4a', M.mochi - .2], ['#r4b', M.kaine - .15], ['#r4c', M.okane - .15]].forEach(([s, a]) => { $(s).style.opacity = eo((t - a) / .3).toFixed(3); });
+  $('#r6d').classList.toggle('mk', t >= M.tashika - .15);
+  $('#r6d').style.opacity = '1';
+  // ---- いつ引き継ぐか
+  S($('#whenCard'), wO, 0, (1 - eo((t - wa) / .5)) * 30);
+  [['#sg1', cs(24) - .1], ['#sg2', cs(25) - .1], ['#sg3', cs(26) - .1]].forEach(([s, a]) => { const k = eo((t - a) / .4); S($(s), k, (1 - k) * 40, 0); });
+  { const k = eo((t - M.doki + .5) / .35); S($('#stamp'), k, 0, 0, 1.25 - .25 * k); }
+  // ---- 赤い枠
+  let ro = 0, rr = null, rp = [16, 16];
+  for (const [s, a, b, clip, pd] of RINGS) {
+    const o = win(t, a, b, .3, .25);
+    if (o > ro) {
+      let r = rectOf(s);
+      if (clip) {   // 会話の中の部品＝見えている所（画面の絵の中・下のぼかしより上）で切る
+        const bd = $('#br .body').getBoundingClientRect(), top = bd.top + 8, bot = bd.top + 470;
+        const y1 = Math.max(r.y, top), y2 = Math.min(r.y + r.h, bot);
+        if (y2 - y1 < 20) continue;
+        r = { x: r.x, y: y1, w: r.w, h: y2 - y1 };
+      }
+      ro = o; rr = r; rp = Array.isArray(pd) ? pd : [pd ?? 16, pd ?? 16];
+    }
+  }
+  ro *= (1 - jo);
+  if (rr && ro > 0) {
+    const [px, py] = rp, p = 1 + .015 * Math.sin(t * 6);
+    const R = $('#ring'); R.style.width = (rr.w + px * 2) + 'px'; R.style.height = (rr.h + py * 2) + 'px';
+    S(R, ro, rr.x - px, rr.y - py, p);
+  } else $('#ring').style.opacity = 0;
+  // ---- 1枚の枠（大きなカードの中は、まとめの一言で全体を囲む）
+  if (sO > 0 && t >= M.wakete - .25 && t < c3.gap_start) {
+    const r = rectOf('#sheet'), pad = 8, o = win(t, M.wakete - .25, c3.gap_start, .3, .3) * sO;
+    const R = $('#ring'); R.style.width = (r.w + pad * 2) + 'px'; R.style.height = (r.h + pad * 2) + 'px';
+    S(R, o, r.x - pad, r.y - pad, 1 + .006 * Math.sin(t * 6));
+  }
+  // ---- 指
+  let cv = 0; for (const [a, b] of CURV) cv = Math.max(cv, win(t, a, b, .25, .25));
+  cv *= (1 - jo);
+  if (cv > 0) {
+    const pts = CURP.map(([tt, at]) => { if (Array.isArray(at)) return [tt, at[0], at[1]]; const r = rectOf(at); return [tt, r.cx - 6, r.cy - 4]; });
+    let x = pts[0][1], y = pts[0][2];
+    for (let i = 0; i < pts.length; i++) {
+      if (t >= pts[i][0]) { x = pts[i][1]; y = pts[i][2]; }
+      if (i + 1 < pts.length && t >= pts[i][0] && t < pts[i + 1][0]) { const k = eio((t - pts[i][0]) / (pts[i + 1][0] - pts[i][0])); x = pts[i][1] + (pts[i + 1][1] - pts[i][1]) * k; y = pts[i][2] + (pts[i + 1][2] - pts[i][2]) * k; break; }
+    }
+    S($('#cur'), cv, x, y);
+    let rp = 0;
+    for (const [ct] of CLICKS) { const k = (t - ct) / .55; if (k >= 0 && k <= 1) rp = k; }
+    if (rp > 0) S($('#rip'), (1 - rp) * cv, x - 45 + 8, y - 45 + 6, .3 + rp * 1.2); else $('#rip').style.opacity = 0;
+  } else { $('#cur').style.opacity = 0; $('#rip').style.opacity = 0; }
+  { const pressed = new Set(); for (const [ct, s] of CLICKS) if (t - ct >= 0 && t - ct < .25) pressed.add(s);
+    for (const [, s] of CLICKS) $(s).style.filter = pressed.has(s) ? 'brightness(.82)' : ''; }
+  // ---- まとめ
+  const ma = c6.gap_start + .1, ea = cs(34) - .15;
+  S($('#sumCard'), win(t, ma, ea, .5, .35), 0, (1 - eo((t - ma) / .6)) * 30);
+  [['#sr1', cs(32) + .1], ['#sr2', cs(32) + 1.0], ['#sr3', cs(33) + .6]].forEach(([s, a]) => { const k = eo((t - a) / .4); S($(s), k, (1 - k) * 40, 0); });
+  $('#end').style.opacity = eo((t - ea) / .5).toFixed(3);
+  // ---- 上の札
+  const labName = { [N1]: '使い方', [N3]: '貼るだけで続きから', [N5]: '番号で続きも' }[now.name];
+  $('#labT').textContent = labName || '';
+  S($('#lab'), labName ? win(t, now.gap_start + .3, now.end, .3, .2) * (1 - jo) : 0);
+  // ---- 字幕
+  let capT = '';
+  for (const c of TL.captions) { const ch = chapterAt(c.start); const b = Math.min(c.end, ch.end); if (t >= c.start && t < b) capT = c.text; }
+  $('#subT').textContent = capT; $('#sub').style.opacity = capT ? 1 : 0;
+}
+window.render = render;
+(async () => {
+  TL = await (await fetch('timeline_v1.json?v=' + Date.now())).json();
+  setup();
+  await document.fonts.ready;
+  await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
+  render(0);
+  window.TL = TL; window.READY = true;
+})();
+</script>
+</body>
+</html>
