@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<title>フヤセルAI【新NISA枠の相談室】でできること v2（説明動画の絵・時間割 v2）</title>
+<!-- v2（2026-11-28）＝v1 と絵は同じ・時間割だけ v2（「次の一手」の読みを直した声）
+     v1（2026-11-28）＝会話引継ぎの video_v1.html の部品（ベージュの地・白いカード・赤い枠・指・右の説明カード・下の字幕）で、7場面を新NISA枠に描き替えた
+     render(t) で t 秒目の絵を作る（時間で決まる）。時間割＝timeline_v1.json（build_timeline_v1.py が作る・声 Hanano）
+     ★字幕は全体の最高位の決まり（2026-11-26・CLAUDE.md の🎬）＝字幕の帯の下の端は画面の下から18%以上（bottom:195px）。
+       字幕の帯の上の端は 777 ＝ 絵（ChatGPT の画面・大きなカード・右のカード）は 760 より上に収める
+     ★値は見本（〇〇〇〇・〇〇万円・〇月〇日）・銘柄と証券会社の名前は出さない・判断の言葉は灰色の帯・隅に「画面はイメージです」
+     ★日付（締めの日など）は出さない＝来年に見ても古くならない
+     ★中身は 2026-11-28 の本物の試し（plugin master の記録）と指示書にそろえた＝何も打たずに送ると止まり方5つ＋ほどく一言＋NISA作戦メモ（8つの見出し）＋次に聞くと良いこと3つ -->
+<style>
+html,body{margin:0;width:1920px;height:1080px;overflow:hidden;background:#e9e6e3}
+*{box-sizing:border-box}
+body{font-family:"BIZ UDPGothic","Yu Gothic",sans-serif;color:#222;-webkit-font-smoothing:antialiased}
+.L{position:absolute;opacity:0;will-change:opacity,transform}
+.min{font-family:"BIZ UDPMincho","Yu Mincho",serif}
+#lab{left:60px;top:30px;display:flex;align-items:center;gap:16px;font-size:30px;font-weight:bold}
+#lab .pill{background:#c41818;color:#fff;border-radius:8px;padding:6px 16px;font-size:26px}
+#sub{left:0;right:0;bottom:195px;text-align:center}/* ★字幕の帯の下の端は画面の下から18%以上（CLAUDE.md の🎬） */
+#sub span{display:inline-block;background:#fff;border-radius:16px;padding:12px 44px;font-size:62px;font-weight:bold;line-height:1.35;box-shadow:0 6px 22px rgba(0,0,0,.13);letter-spacing:.02em}
+/* はじめに */
+#introCard{left:240px;top:130px;width:1440px;height:480px;background:#fff;border-radius:28px;box-shadow:0 18px 50px rgba(0,0,0,.10);text-align:center;padding-top:58px}
+#introCard img{width:120px;height:120px;border-radius:24px}
+#introCard .t1{font-size:78px;font-weight:bold;margin-top:22px;white-space:nowrap}
+#introCard .t2{font-size:54px;margin-top:10px}
+#introCard .bar{width:90px;height:6px;background:#c41818;margin:26px auto 0;border-radius:3px}
+#qCard{left:160px;top:110px;width:1600px;height:440px;background:#fff;border-radius:28px;box-shadow:0 18px 50px rgba(0,0,0,.10)}
+#qCard svg{position:absolute;left:70px;top:112px}
+#qCard .k{position:absolute;left:320px;top:56px;font-size:40px;color:#c41818;font-weight:bold;opacity:0}
+#qCard .q{position:absolute;left:320px;font-size:60px;font-weight:bold;line-height:1.38;white-space:nowrap;opacity:0}
+#q1{top:136px}#q2{top:252px}
+#ansPill{left:0;right:0;top:600px;text-align:center}
+#ansPill span{display:inline-flex;align-items:center;gap:22px;background:#0d0d0d;color:#fff;border-radius:70px;padding:18px 56px 18px 26px;font-size:54px;font-weight:bold}
+#ansPill i{display:block;width:70px;height:70px;border-radius:50%;background:#fff;position:relative}
+#ansPill i:after{content:"";position:absolute;left:17px;top:17px;width:36px;height:36px;border:7px solid #0d0d0d;border-radius:50%;box-sizing:border-box}
+/* パソコンの画面の絵（下の端 756＝字幕の帯の上の端 777 より上） */
+#br{left:100px;top:96px;width:1110px;height:660px;background:#fff;border-radius:20px;box-shadow:0 22px 60px rgba(0,0,0,.14);overflow:hidden}
+#br .top{position:relative;height:58px;background:#e8e4e0;display:flex;align-items:flex-end;padding:0 18px 0 22px;gap:10px;border-bottom:1px solid #e2dfdc}
+#br .dot{width:15px;height:15px;border-radius:50%;background:#cfcac5;margin-bottom:21px}
+.tab{height:50px;width:300px;margin-left:16px;border-radius:14px 14px 0 0;display:flex;align-items:center;gap:10px;padding:0 14px 0 16px;font-size:21px;background:#fff;color:#222;font-weight:bold}
+.tab .ti{width:26px;height:26px;border-radius:50%;background:#222;flex:none}
+.tab .tn{flex:1}
+#br .body{position:absolute;left:0;top:58px;width:1110px;height:602px;overflow:hidden}
+.scr{position:absolute;inset:0;opacity:0;overflow:hidden;background:#fcfcfc}
+.gside{position:absolute;left:0;top:0;bottom:0;width:240px;background:#f7f7f8;border-right:1px solid #e6e6e6;padding:24px 14px}
+.gside .ttl{font-size:27px;font-weight:bold;margin:0 0 20px 10px}
+.gside .it{display:flex;align-items:center;gap:10px;font-size:23px;padding:11px 12px;border-radius:12px;color:#222}
+.gside .it svg{display:block;flex:none}
+.gside .rl{font-size:19px;color:#999;margin:26px 0 6px 12px}
+.gside i{display:block;height:12px;border-radius:6px;background:#e4e4e4;margin:17px 12px}
+.gmain{position:absolute;left:240px;right:0;top:0;bottom:0;overflow:hidden}
+.gtog{position:absolute;left:295px;top:24px;width:280px;height:58px;border-radius:29px;background:#efefef;display:flex;padding:4px}
+.gtog div{flex:1;border-radius:25px;text-align:center;font-size:24px;line-height:50px;color:#666}
+.gtog .on{background:#fff;color:#111;font-weight:bold;box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.ghead{position:absolute;left:0;right:0;text-align:center;font-size:38px}
+.gpill{position:absolute;height:92px;border:1px solid #e3e3e3;border-radius:46px;background:#fff;box-shadow:0 4px 18px rgba(0,0,0,.06);display:flex;align-items:center;padding:0 16px 0 30px;gap:18px}
+.gpill .tx{flex:1;font-size:30px;color:#222;white-space:nowrap;overflow:hidden;display:flex;align-items:center}
+.gpill .pl{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:40px;color:#333;flex:none;margin-left:-14px}
+.send{width:62px;height:62px;border-radius:50%;background:#8d5cf6;display:flex;align-items:center;justify-content:center;position:relative;flex:none}
+.send svg{display:block}
+.caret{display:inline-block;width:3px;height:36px;background:#222;vertical-align:middle;margin-left:2px}
+#gInN{left:40px;top:250px;width:790px}
+#gInA{left:40px;top:500px;width:790px}
+.pmenu{position:absolute;left:40px;width:790px;border:1px solid #e3e3e3;border-radius:24px;background:#fff;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:10px;opacity:0}
+#pMenuN{top:352px}
+.pmi{display:flex;align-items:center;gap:14px;height:44px;padding:0 16px;border-radius:12px;font-size:25px;color:#222;white-space:nowrap}
+.pmi svg{display:block;flex:none}
+.pmi .d{font-size:20px;color:#8a8a8a}
+.pmi .ic{width:28px;height:28px;border-radius:6px;background:#31be2d;color:#fff;font-size:17px;text-align:center;line-height:28px;font-weight:bold;flex:none}
+.chip3{display:inline-flex;align-items:center;gap:10px;color:#3d63d6;font-weight:bold;vertical-align:middle}
+.chip3 b{width:36px;height:36px;border-radius:8px;background:#31be2d;color:#fff;font-size:20px;text-align:center;line-height:36px;flex:none}
+.gfoot{position:absolute;left:0;right:0;top:480px;bottom:0;background:linear-gradient(to bottom,rgba(252,252,252,0),#fcfcfc 22px)}
+/* NISA口座の画面の見本の画像（中は伏せ字） */
+.nimg{display:inline-block;position:relative;background:#fff;border:1px solid #cfd6e4;border-radius:8px;overflow:hidden;vertical-align:middle}
+.nimg .h{background:#2c5aa0;color:#fff;font-weight:bold}
+.nimg .r{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #eef0f4;color:#555}
+.nimg .r i{display:block;background:#dde2ea;border-radius:4px}
+.nimg .w{color:#c41818;font-weight:bold}
+.nimgS{width:70px;height:50px;margin-right:12px}
+.nimgS .h{height:13px}
+.nimgS .r{height:9px;padding:0 5px}.nimgS .r i{height:4px;width:30px}
+.nimgL{width:300px;height:176px;text-align:left}
+.nimgL .h{height:34px;font-size:18px;line-height:34px;padding:0 12px}
+.nimgL .r{height:30px;padding:0 12px;font-size:16px}.nimgL .r i{height:10px;width:120px}
+/* 会話 */
+.cv{position:absolute;left:0;top:0;right:0;height:2400px}
+.ub{position:absolute;right:34px;background:#ece5fb;border-radius:26px;display:flex;align-items:center;gap:12px;font-size:30px;padding:12px 28px;white-space:nowrap;opacity:0}
+.ub .chip3 b{width:34px;height:34px;line-height:34px;background:#c41818}
+.gl{position:absolute;left:40px;width:790px}
+.gl i{display:block;height:22px;border-radius:11px;background:#e6e6e6;margin-bottom:16px}
+.at{position:absolute;left:40px;width:790px;font-size:28px;line-height:1.5;opacity:0}
+.ah{font-size:28px;font-weight:bold;margin-bottom:8px}
+#ubA1{top:24px}
+#ansA1{top:104px}
+#stops{position:absolute;left:40px;top:196px;width:790px}
+.st{display:flex;align-items:center;gap:14px;height:54px;font-size:27px;white-space:nowrap;opacity:0}
+.st b{width:38px;height:38px;border-radius:50%;background:#c41818;color:#fff;font-size:22px;text-align:center;line-height:38px;flex:none}
+.st .lb{font-weight:bold;width:340px;flex:none}
+.st .hb{display:block;height:18px;border-radius:9px;background:#e2e2e2;opacity:0}
+#memoMini{top:486px}
+#memoMini .gl{position:relative;left:0}
+#ubA2{top:730px}
+.stk{position:absolute;left:40px;top:810px;width:790px;border:1px solid #dedede;border-radius:16px;background:#fff;padding:14px 22px;opacity:0}
+.stk div{height:44px;display:flex;align-items:center;font-size:25px;white-space:nowrap;overflow:hidden}
+.stk .h{font-size:28px;font-weight:bold}
+.stk .lb{font-weight:bold;color:#444;margin-right:4px}
+.gb{display:inline-block;width:170px;height:18px;border-radius:9px;background:#d8d8d8;vertical-align:middle;margin:0 8px}
+#stkHow{height:auto !important;display:block !important}
+#stkHow div{height:44px}
+#ubA3{top:1170px;padding:12px}
+#ansD{top:1376px}
+.rd{display:inline-flex;align-items:center;gap:10px;height:46px;font-size:27px;white-space:nowrap;padding:0 10px;border-radius:10px;opacity:0}
+.rd .lb{font-weight:bold}
+#nextD{top:1560px}
+.nq{display:flex;align-items:center;gap:16px;font-size:27px;height:58px;opacity:0;white-space:nowrap}
+.nq b{width:44px;height:44px;border-radius:50%;background:#c41818;color:#fff;font-size:24px;text-align:center;line-height:44px;flex:none}
+#nqF{font-size:24px;color:#555;margin-top:6px;opacity:0}
+#ubA4{top:1850px}
+#ansE{top:1930px}
+#ansE .gl{position:relative;left:0;margin-top:12px}
+#imgNote{position:absolute;right:22px;bottom:15px;font-size:19px;color:#6b6460;opacity:0}
+/* 大きなカード（下の端 750） */
+.big{left:310px;top:36px;width:1300px;height:714px;background:#fff;border-radius:30px;box-shadow:0 18px 50px rgba(0,0,0,.10);padding:34px 90px}
+.big .k{font-size:34px;color:#c41818;font-weight:bold;text-align:center}
+.big .t{font-size:62px;text-align:center;margin-top:4px;white-space:nowrap}
+.big .bar{width:90px;height:6px;background:#c41818;margin:16px auto 24px;border-radius:3px}
+.big .note{position:absolute;right:30px;bottom:16px;font-size:20px;color:#8a817a}
+/* 決まりと数字でほどく */
+#hT{position:relative;height:90px}#hT span{position:absolute;left:0;right:0;opacity:0}
+#kmBox{position:absolute;left:0;right:0;top:330px;display:flex;justify-content:center;align-items:center;gap:26px}
+#kmBox .kp{display:inline-block;background:#f3ebe0;border-radius:18px;padding:10px 34px;font-size:50px;font-weight:bold;opacity:0;white-space:nowrap}
+#kmBox .kp.r{background:#c41818;color:#fff}
+#kmBox b{font-size:50px;color:#8a817a;opacity:0}
+#myth{position:absolute;left:0;right:0;top:236px;text-align:center;opacity:0}
+#myth span{position:relative;display:inline-block;background:#fff4f4;border:3px solid #e8b4b4;border-radius:18px;padding:8px 40px;font-size:50px;font-weight:bold;white-space:nowrap}
+#mythLine{position:absolute;left:24px;right:24px;top:50%;height:7px;margin-top:-3px;background:#c41818;border-radius:4px;transform-origin:left center;transform:scaleX(0)}
+#gLab{position:absolute;left:150px;top:350px;font-size:34px;font-weight:bold;opacity:0;white-space:nowrap}
+#gauge{position:absolute;left:150px;top:400px;width:1000px;height:88px;background:#f1ece6;border-radius:16px;opacity:0}
+#gHeld{position:absolute;left:0;top:0;bottom:0;width:380px;background:#d9cfc4;border-radius:16px 0 0 16px;display:flex;align-items:center;justify-content:center;font-size:26px;color:#5f554c;font-weight:bold}
+#gBlk{position:absolute;left:390px;top:0;bottom:0;width:340px;border-radius:12px;border:4px solid #c41818;background:#c41818;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:bold;color:#fff;white-space:nowrap}
+#gArrow{position:absolute;left:470px;top:330px;display:flex;align-items:center;gap:10px;opacity:0}
+#gArrow span{background:#2f9e44;color:#fff;border-radius:20px;padding:4px 22px;font-size:28px;font-weight:bold}
+#gNote{position:absolute;left:0;right:0;top:506px;text-align:center;font-size:34px;font-weight:bold;color:#2f7d3a;opacity:0;white-space:nowrap}
+#chips{position:absolute;left:0;right:0;top:584px;display:flex;justify-content:center;gap:22px}
+.ch{display:flex;align-items:center;gap:10px;background:#fff4f4;border:3px solid #e8b4b4;border-radius:14px;padding:8px 20px;font-size:30px;font-weight:bold;white-space:nowrap;opacity:0}
+.ch i{display:none;width:34px;height:34px;border-radius:50%;background:#2f9e44;flex:none}
+.ch i svg{display:block}
+.ch.done{background:#f1f8f1;border-color:#b9dcb9;color:#7a8a7a}
+.ch.done i{display:block}
+.ch.done span{text-decoration:line-through;text-decoration-color:#2f9e44;text-decoration-thickness:4px}
+/* NISA作戦メモ */
+#memoCard{left:260px;width:1400px;padding:20px 60px 26px}
+#memo{position:relative;border:2px solid #dedede;border-radius:18px;overflow:hidden;margin-top:20px}
+#memo .fh{height:50px;background:#f3f3f3;display:flex;align-items:center;padding:0 26px;font-size:24px;color:#666}
+#memo .bd{padding:12px 26px 12px}
+#memo .h1{font-size:32px;font-weight:bold;height:48px;display:flex;align-items:center;white-space:nowrap}
+.row{display:grid;grid-template-columns:290px 1fr;align-items:center;height:54px;font-size:28px;white-space:nowrap}
+.row .lb{justify-self:start;font-weight:bold;font-size:26px;color:#444;background:#efefef;border-radius:10px;padding:5px 14px}
+.row.on .lb{background:#c41818;color:#fff}
+.row .v{opacity:0;overflow:hidden}
+.row .v span{opacity:0}
+.mk{background:linear-gradient(transparent 55%,#ffe27a 55%)}
+/* 落とし穴も先回り */
+.sig{position:absolute;display:flex;align-items:center;gap:22px;height:96px;opacity:0}
+.sig .n{width:68px;height:68px;border-radius:50%;background:#fff4f4;border:4px solid #e8b4b4;color:#c41818;font-size:42px;font-weight:bold;text-align:center;line-height:60px;flex:none}
+.sig .w{font-size:44px;font-weight:bold;white-space:nowrap}
+#sg1{left:110px;top:252px}#sg2{left:660px;top:252px}#sg3{left:110px;top:372px}#sg4{left:660px;top:372px}
+#stamp{position:absolute;left:0;right:0;top:530px;text-align:center;opacity:0}
+#stamp span{display:inline-block;background:#c41818;color:#fff;border-radius:22px;padding:14px 60px;font-size:64px;font-weight:bold;box-shadow:0 10px 30px rgba(196,24,24,.25)}
+/* 右の説明のカード */
+.co{left:1262px;top:230px;width:590px;background:#fff;border-radius:22px;box-shadow:0 12px 36px rgba(0,0,0,.10);border-left:12px solid #c41818;padding:30px 34px}
+.co .k{font-size:28px;color:#c41818;font-weight:bold;margin-bottom:6px}
+.co .b{font-size:50px;font-weight:bold;line-height:1.4}
+.co .s{font-size:30px;color:#555;margin-top:12px;line-height:1.5}
+/* 赤い枠・指 */
+#ring{left:0;top:0;border:7px solid #c41818;border-radius:24px;box-shadow:0 0 0 8px rgba(196,24,24,.18)}
+#cur{left:0;top:0;width:54px;height:54px}
+#rip{left:0;top:0;width:90px;height:90px;border-radius:50%;border:6px solid #c41818}
+/* まとめ */
+.srow{display:flex;align-items:center;gap:36px;margin:40px 0 0 120px;opacity:0}
+.srow .n{width:92px;height:92px;border-radius:50%;background:#c41818;color:#fff;font-size:52px;font-weight:bold;text-align:center;line-height:92px;flex:none}
+.srow .w{font-size:62px;font-weight:bold;white-space:nowrap}
+#end{left:0;top:0;width:1920px;height:1080px;background:#e9e6e3;text-align:center}
+#end img{width:150px;height:150px;border-radius:30px;margin-top:220px}
+#end .t{font-size:84px;font-weight:bold;margin-top:30px;white-space:nowrap}
+#end .s{font-size:44px;color:#555;margin-top:18px}
+</style>
+</head>
+<body>
+<!-- はじめに -->
+<div class="L" id="introCard"><img src="assets/huya.png" alt=""><div class="t1">フヤセルAI【新NISA枠の相談室】</div><div class="t2">で、できること</div><div class="bar"></div></div>
+<div class="L" id="qCard">
+  <svg width="200" height="210" viewBox="0 0 200 210"><rect x="8" y="8" width="184" height="190" rx="18" fill="#fbf8f4" stroke="#d9cfc4" stroke-width="5"/>
+    <rect x="26" y="30" width="148" height="34" rx="8" fill="#2c5aa0"/><text x="100" y="56" text-anchor="middle" font-size="24" font-weight="bold" fill="#fff" font-family="BIZ UDPGothic,Yu Gothic,sans-serif">NISA</text>
+    <rect x="26" y="84" width="148" height="30" rx="8" fill="#fff" stroke="#c9beb2" stroke-width="3"/><rect x="29" y="87" width="26" height="24" rx="6" fill="#d9cdf3"/>
+    <rect x="26" y="134" width="96" height="16" rx="8" fill="#dcdcdc"/><rect x="26" y="160" width="70" height="16" rx="8" fill="#dcdcdc"/>
+    <text x="146" y="182" font-size="64" font-weight="bold" fill="#c41818" font-family="BIZ UDPGothic,Yu Gothic,sans-serif">?</text></svg>
+  <div class="k" id="qK">そんな迷いで、止まっていませんか</div>
+  <div class="q" id="q1">「枠を使うのが、もったいない」</div>
+  <div class="q" id="q2">「何を入れればいいか、分からない」</div>
+</div>
+<div class="L" id="ansPill"><span><i></i>どこに・いつ・どう使うかを、一緒に決めます</span></div>
+
+<!-- パソコンの画面の絵 -->
+<div class="L" id="br">
+  <div class="top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><div class="tab"><span class="ti"></span><span class="tn">ChatGPT</span></div><div id="imgNote">画面はイメージです</div></div>
+  <div class="body">
+    <!-- 新しいチャット：＋から選んで、何も打たずに送る -->
+    <div class="scr" id="sNew">
+      <div class="gside"><div class="ttl">ChatGPT</div>
+        <div class="it"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M4 21 L4 17 L16 5 L20 9 L8 21 Z M14 7 L18 11" fill="none" stroke="#333" stroke-width="2.2" stroke-linejoin="round"/></svg><span>新しいチャット</span></div>
+        <div class="rl">最近</div><i style="width:80%"></i><i style="width:62%"></i><i style="width:74%"></i><i style="width:55%"></i></div>
+      <div class="gmain">
+        <div class="gtog"><div class="on">Chat</div><div>Work</div></div>
+        <div class="ghead" style="top:150px">準備ができたらどうぞ。</div>
+        <div class="gpill" id="gInN"><span class="pl" id="gPlusN">＋</span><span class="tx" id="inN"></span><span class="send" id="gSendN"><svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 26 V5 M6 13 L15 4 L24 13" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+        <div class="pmenu" id="pMenuN">
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M17 8 L9.5 15.5 a2.5 2.5 0 0 0 3.5 3.5 L20.5 11.5 a5 5 0 0 0 -7 -7 L6 12 a7 7 0 0 0 10 10 L22 16" fill="none" stroke="#555" stroke-width="2" stroke-linecap="round"/></svg><span>写真やファイルを追加</span><span class="d">コンピューターからアップロード</span></div>
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><rect x="2" y="2" width="22" height="22" rx="5" fill="#5ab0f0"/><circle cx="17" cy="9" r="3.5" fill="#ffd34d"/><path d="M2 20 L10 12 L18 20 L24 15 L24 24 L2 24 Z" fill="#3a8fd6"/></svg><span>画像を作成</span><span class="d">何でも視覚化</span></div>
+          <div class="pmi"><svg width="26" height="26" viewBox="0 0 26 26"><circle cx="13" cy="13" r="10" fill="none" stroke="#22a6d8" stroke-width="2.2"/><ellipse cx="13" cy="13" rx="4.5" ry="10" fill="none" stroke="#22a6d8" stroke-width="2"/><path d="M3 13 H23" stroke="#22a6d8" stroke-width="2"/></svg><span>ウェブ検索</span><span class="d">リアルタイムのニュースや情報を検索</span></div>
+          <div class="pmi"><span class="ic">フ</span><span>フヤセルAI【PRO】</span></div>
+          <div class="pmi" id="pItemN"><span class="ic">フ</span><span>フヤセルAI【新NISA枠の相談室】</span></div>
+        </div>
+      </div>
+    </div>
+    <!-- 会話：止まり方5つ → （作戦メモ）→ 銘柄 → 画像 → 番号で続き -->
+    <div class="scr" id="sConv">
+      <div class="gside"><div class="ttl">ChatGPT</div>
+        <div class="it"><svg width="26" height="26" viewBox="0 0 26 26"><path d="M4 21 L4 17 L16 5 L20 9 L8 21 Z M14 7 L18 11" fill="none" stroke="#333" stroke-width="2.2" stroke-linejoin="round"/></svg><span>新しいチャット</span></div>
+        <div class="rl">最近</div><i style="width:70%"></i><i style="width:80%"></i><i style="width:62%"></i><i style="width:74%"></i></div>
+      <div class="gmain">
+        <div class="cv" id="cvA">
+          <div class="ub" id="ubA1"><span class="chip3"><b>フ</b>フヤセルAI【新NISA枠の相談室】</span></div>
+          <div class="at" id="ansA1">新NISAの枠の使い方で答えます。<br>よくある止まり方は、この5つです。</div>
+          <div id="stops">
+            <div class="st" id="st1"><b>1</b><span class="lb">損したら、枠が無駄になる</span><span class="hb" style="width:330px"></span></div>
+            <div class="st" id="st2"><b>2</b><span class="lb">売ると、枠が減る</span><span class="hb" style="width:300px"></span></div>
+            <div class="st" id="st3"><b>3</b><span class="lb">何を入れるか、分からない</span><span class="hb" style="width:340px"></span></div>
+            <div class="st" id="st4"><b>4</b><span class="lb">いつ買うか、決められない</span><span class="hb" style="width:290px"></span></div>
+            <div class="st" id="st5"><b>5</b><span class="lb">年末で、枠が余っている</span><span class="hb" style="width:320px"></span></div>
+          </div>
+          <div class="at" id="memoMini"><div class="ah">NISA作戦メモ</div><div class="gl"><i style="width:92%"></i><i style="width:84%"></i><i style="width:96%"></i><i style="width:70%"></i></div></div>
+          <div class="ub" id="ubA2">〇〇〇〇</div>
+          <div class="stk" id="stkC">
+            <div class="h">【〇〇〇〇】〇〇〇〇（東証プライム）</div>
+            <div><span class="lb">この株の性格：</span>長く持つ本命・配当</div>
+            <div id="stkJ"><span class="lb">判断：</span><span class="gb"></span>（AIの分析による判定）</div>
+            <div id="stkHow"><div><span class="lb">買い方：</span>〇〇万円を、2回に分けて</div><div><span class="lb">売り方：</span>2倍で半分・損切りの値は先に決める</div></div>
+            <div><span class="lb">気をつけること：</span>決算の発表は〇月〇日</div>
+          </div>
+          <div class="ub" id="ubA3"><span class="nimg nimgL"><div class="h">NISA口座</div><div class="r"><i></i><i style="width:60px"></i></div><div class="r"><i></i><i style="width:60px"></i></div><div class="r"><i></i><i style="width:60px"></i></div><div class="r"><span>残りの枠</span><span class="w">〇〇万円</span></div></span></div>
+          <div class="at" id="ansD">画像から読み取りました。<br><span class="rd" id="rdNokori"><span class="lb">残りの枠：</span>今年 〇〇万円</span><br><span class="rd" id="rdMochi"><span class="lb">持ち株：</span>〇〇〇〇 100株 ほか2銘柄</span></div>
+          <div class="at" id="nextD"><div class="ah" style="margin-bottom:12px">次に聞くと良いこと</div>
+            <div id="nqsD">
+              <div class="nq" id="nq1"><b>1</b>この持ち株で、NISA作戦メモを作って</div>
+              <div class="nq" id="nq2"><b>2</b>配当の受け取り方を、確かめる方法は？</div>
+              <div class="nq" id="nq3"><b>3</b>来年1月の買い方を、教えて</div>
+            </div>
+            <div id="nqF">番号だけ送れば、続きを答えます</div></div>
+          <div class="ub" id="ubA4">1</div>
+          <div class="at" id="ansE">1番の続きです。この持ち株で作戦メモを作ります。
+            <div class="gl"><i style="width:95%"></i><i style="width:87%"></i><i style="width:66%"></i></div></div>
+        </div>
+        <div class="gfoot"></div>
+        <div class="gpill" id="gInA"><span class="pl">＋</span><span class="tx" id="inA"></span><span class="md" style="font-size:24px;color:#999">Medium ⌄</span><span class="send" id="gSendA"><svg width="30" height="30" viewBox="0 0 30 30"><path d="M15 26 V5 M6 13 L15 4 L24 13" stroke="#fff" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 右の説明 -->
+<div class="L co" data-a="7" data-b="9"><div class="k">使い方</div><div class="b">「＋」から選んで</div><div class="s">何も打たずに、<br>送信の↑を押すだけ</div></div>
+<div class="L co" data-a="10" data-b="11"><div class="k">返ってくるのは</div><div class="b">止まり方<br>5つ</div><div class="s">それぞれに、<br>ほどく一言</div></div>
+<div class="L co" data-a="23" data-b="24"><div class="k">銘柄も聞ける</div><div class="b">銘柄名か<br>コードを送る</div><div class="s">打って送るだけ</div></div>
+<div class="L co" data-a="25" data-b="26"><div class="k">答えるのは</div><div class="b">置き場所と<br>買い方・売り方</div><div class="s">NISAか、特定口座か</div></div>
+<div class="L co" data-a="27" data-b="28"><div class="k">画像でも</div><div class="b">NISAの画面を<br>貼って送る</div><div class="s">残りの枠や持ち株を<br>読み取る</div></div>
+<div class="L co" data-a="34" data-b="35"><div class="k">続きは番号で</div><div class="b">番号を<br>送るだけ</div><div class="s">答えの最後の<br>3つから</div></div>
+
+<!-- 決まりと数字でほどく -->
+<div class="L big" id="hodokuCard"><div class="k">決まりと数字でほどく</div><div class="t min" id="hT"><span id="hT1">迷いは、決まりと数字でほどく</span><span id="hT2">たとえば、この思い込み</span></div><div class="bar"></div>
+  <div id="kmBox"><span class="kp" id="km1">NISAの決まり</span><b id="km2">＋</b><span class="kp" id="km3">数字</span><b id="km4">→</b><span class="kp r" id="km5">ほどく一言</span></div>
+  <div id="myth"><span>「損したら、枠が無駄になる」<i id="mythLine"></i></span></div>
+  <div id="gLab">生涯の枠</div>
+  <div id="gArrow"><svg width="40" height="40" viewBox="0 0 40 40"><path d="M20 4 V32 M8 22 L20 34 L32 22" stroke="#2f9e44" stroke-width="5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><span>翌年</span></div>
+  <div id="gauge"><div id="gHeld">持っている株</div><div id="gBlk">〇〇万円の株</div></div>
+  <div id="gNote">売った値段ではなく、買った値段の分が戻る</div>
+  <div id="chips">
+    <div class="ch" id="ch1"><i><svg width="34" height="34" viewBox="0 0 34 34"><path d="M9 17.5 L15 23 L25 11" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>何を入れるか分からない</span></div>
+    <div class="ch" id="ch2"><i><svg width="34" height="34" viewBox="0 0 34 34"><path d="M9 17.5 L15 23 L25 11" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>いつ買うか決められない</span></div>
+    <div class="ch" id="ch3"><i><svg width="34" height="34" viewBox="0 0 34 34"><path d="M9 17.5 L15 23 L25 11" fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg></i><span>年末で枠が余っている</span></div>
+  </div>
+  <div class="note">図はイメージです</div>
+</div>
+<!-- NISA作戦メモ -->
+<div class="L big" id="memoCard"><div class="k">NISA作戦メモ</div>
+  <div id="memo"><div class="fh">答えの最後のまとめ</div>
+    <div class="bd">
+      <div class="h1">NISA作戦メモ</div>
+      <div class="row" id="r1"><span class="lb">止まっている所</span><div class="v">損したら枠が無駄になる、と思って動けない</div></div>
+      <div class="row" id="r2"><span class="lb">ほどく一言</span><div class="v">生涯の枠は、買った値段の分だけ翌年に戻る</div></div>
+      <div class="row" id="r3"><span class="lb">置き場所</span><div class="v"><span id="r3a">NISA＝長く持つ本命・配当の株</span><span id="r3b">　特定口座＝入れ替える株</span></div></div>
+      <div class="row" id="r4"><span class="lb">今年やること</span><div class="v">締めの日までに、本命の〇〇〇〇を〇〇万円分</div></div>
+      <div class="row" id="r5"><span class="lb">来年1月にやること</span><div class="v">〇月〇日から、残りを2回に分けて</div></div>
+      <div class="row" id="r6"><span class="lb">売り方の決まり</span><div class="v">2倍で半分・損切りの値は先に決める</div></div>
+      <div class="row" id="r7"><span class="lb">点検</span><div class="v">配当の受け取り方・前のNISAの期限</div></div>
+      <div class="row" id="r8"><span class="lb">次の1手</span><div class="v"><span id="r8d">〇月〇日</span>：本命の〇〇〇〇を〇〇万円分</div></div>
+    </div></div>
+  <div class="note">画面はイメージです</div>
+</div>
+<!-- 落とし穴も先回り -->
+<div class="L big" id="trapCard"><div class="k">落とし穴も先回り</div><div class="t min">答えの中で、先に教える</div><div class="bar"></div>
+  <div class="sig" id="sg1"><div class="n">!</div><div class="w">年末の、枠の締めの日</div></div>
+  <div class="sig" id="sg2"><div class="n">!</div><div class="w">前のNISAの株の期限</div></div>
+  <div class="sig" id="sg3"><div class="n">!</div><div class="w">配当の受け取り方</div></div>
+  <div class="sig" id="sg4"><div class="n">!</div><div class="w">家族に残す時</div></div>
+  <div id="stamp"><span>先回りして答える</span></div>
+</div>
+<!-- まとめ -->
+<div class="L big" id="sumCard"><div class="k">まとめ</div><div class="t min">「もったいない」を、次の1手に</div><div class="bar"></div>
+  <div class="srow" id="sr1"><div class="n">1</div><div class="w">「＋」から選ぶ</div></div>
+  <div class="srow" id="sr2"><div class="n">2</div><div class="w">何も打たずに送る</div></div>
+  <div class="srow" id="sr3"><div class="n">3</div><div class="w">続きは番号を送る</div></div>
+</div>
+<div class="L" id="end"><img src="assets/huya.png" alt=""><div class="t">フヤセルAI【新NISA枠の相談室】</div><div class="s">NISAの相談相手に</div></div>
+
+<div class="L" id="ring"></div>
+<div class="L" id="rip"></div>
+<div class="L" id="cur"><svg width="54" height="54" viewBox="0 0 54 54"><path d="M8 4 L8 44 L18 34 L26 50 L34 46 L26 31 L41 31 Z" fill="#111" stroke="#fff" stroke-width="3.5" stroke-linejoin="round"/></svg></div>
+<div class="L" id="lab"><span class="pill">フヤセルAI【新NISA枠の相談室】</span><span id="labT"></span></div>
+<div class="L" id="sub"><span id="subT"></span></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const cl = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const eo = x => 1 - Math.pow(1 - cl(x), 3);
+const eio = x => { x = cl(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const win = (t, a, b, fi = .35, fo = .35) => Math.max(0, Math.min(eo((t - a) / fi), eo((b - t) / fo)));
+function S(el, o, x = 0, y = 0, s = 1) { el.style.opacity = o.toFixed(3); el.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${s.toFixed(4)})`; }
+function up(sel, a, d = 14, dur = .35) { const k = eo((T0 - a) / dur); S($(sel), k, 0, (1 - k) * d); return k; }
+let TL, CAP, CH, M, T0 = 0;
+const cs = i => CAP[i].start, ce = i => CAP[i].end;
+function rectOf(sel) { const r = $(sel).getBoundingClientRect(); return { x: r.left, y: r.top, w: r.width, h: r.height, cx: r.left + r.width / 2, cy: r.top + r.height / 2 }; }
+let RINGS, CURP, CURV, CLICKS, T, SCRA;
+const N0 = 'はじめに', N1 = '使い方', N2 = '決まりと数字でほどく', N3 = 'NISA作戦メモ', N4 = '銘柄も聞ける', N5 = '落とし穴も先回り', N6 = 'まとめ';
+const IMG_S = '<span class="nimg nimgS"><div class="h"></div><div class="r"><i></i></div><div class="r"><i></i></div><div class="r"><i></i></div></span>';
+function setup() {
+  CAP = {}; TL.captions.forEach(c => CAP[c.i] = c);
+  CH = {}; TL.chapters.forEach(c => CH[c.name] = c);
+  M = TL.marks;
+  // 押す時刻
+  T = { plus: M.plus + .25, pick: M.pick + .45, push: M.push + .1, typeC: cs(24) - .1, sendC: M.okuru + .3,
+        img: M.gazo - .1, sendD: M.okutte + .35, type1: M.bango - .1, send1: M.okureba + .35 };
+  // [部品, 出す, 消す, 会話の中の部品＝見えている所で切る, 余白（無ければ16・[横, 縦]も可）]
+  RINGS = [['#gInN', cs(8) - .2, M.plus - .3], ['#gPlusN', M.plus - .35, T.plus + .3], ['#pItemN', T.plus + .3, T.pick + .15, 0, [12, 2]],
+           ['#gInN', M.nani - .1, M.arrow - .2], ['#gSendN', M.arrow - .1, T.push + .1],
+           ['#stops', M.itsutsu - .3, ce(11), 1, [14, 6]],
+           ['#gInA', cs(24) - .25, T.sendC - .3], ['#gSendA', T.sendC - .35, T.sendC + .35],
+           ['#stkJ', M.nisaka - .25, M.okiba - .1, 1, [14, 2]], ['#stkHow', M.okiba - .1, ce(26), 1, [14, 2]],
+           ['#gInA', T.img - .05, T.sendD - .3], ['#gSendA', T.sendD - .35, T.sendD + .35],
+           ['#rdNokori', Math.max(M.nokori - .25, T.sendD + .85), M.mochikabu - .25, 1, [8, 4]], ['#rdMochi', M.mochikabu - .25, ce(28), 1, [8, 4]],
+           ['#nqsD', cs(34) - .2, T.type1 - .15, 1, [14, 4]], ['#gInA', T.type1 - .1, T.send1 - .3], ['#gSendA', T.send1 - .35, T.send1 + .35],
+           ['#ansE', T.send1 + .7, ce(35), 1]];
+  CURP = [[cs(8) - .3, [700, 560]], [T.plus - .5, '#gPlusN'], [T.plus + .1, '#gPlusN'], [T.pick - .45, '#pItemN'], [T.pick + .15, '#pItemN'],
+          [M.arrow - .6, '#gSendN'], [T.push + .3, '#gSendN'],
+          [M.okuru - .9, [760, 640]], [T.sendC - .45, '#gSendA'], [T.sendC + .3, '#gSendA'],
+          [T.img - .5, [760, 640]], [T.sendD - .45, '#gSendA'], [T.sendD + .3, '#gSendA'],
+          [T.type1 - .3, [900, 640]], [T.send1 - .45, '#gSendA'], [T.send1 + .3, '#gSendA']];
+  CURV = [[cs(8) - .3, T.push + .15],   // ★押した後すぐ画面が会話に変わる＝枠と指はその時に消す（2026-11-28）
+          [M.okuru - .9, T.sendC + .6], [T.img - .5, T.sendD + .6], [T.type1 - .3, T.send1 + .6]];
+  CLICKS = [[T.plus, '#gPlusN'], [T.pick, '#pItemN'], [T.push, '#gSendN'], [T.sendC, '#gSendA'], [T.sendD, '#gSendA'], [T.send1, '#gSendA']];
+  // 会話を上へ送る（その時刻に、その位置へ・かける秒）＝大きなカードが出ている間に動かす所は、かける秒を短く
+  const c3 = CH[N3], c5 = CH[N5];
+  SCRA = [[c3.gap_start + 1.0, 470, .1], [T.sendC + .1, 700, .55], [T.sendD + .1, 1150, .55], [c5.gap_start + 1.2, 1530, .1], [T.send1 + .1, 1838, .55]];
+}
+function chapterAt(t) { let c = TL.chapters[0]; for (const x of TL.chapters) if (t >= x.gap_start) c = x; return c; }
+function typed(s, t, a, cps = 9) { const n = Math.floor(cl((t - a) * cps, 0, [...s].length)); return [...s].slice(0, n).join(''); }
+const caret = t => (Math.floor(t * 2) % 2 ? '<span class="caret"></span>' : '');
+const ph = t => (caret(t) || '<span style="color:#aaa">質問してみましょう</span>');
+// ★2026-11-28 直した：前の形（会話引継ぎから写した）は「次の動きの前」で y を行き先に置き直していた＝送る途中が一瞬で跳び、送った直後に画面が空になった
+function scroll(list, t) { let y = 0, prev = 0; for (const [a, to, d] of list) { if (t < a) break; y = prev + (to - prev) * eio((t - a) / d); prev = to; } return y; }
+function render(t) {
+  T0 = t;
+  const c1 = CH[N1], c2 = CH[N2], c3 = CH[N3], c4 = CH[N4], c5 = CH[N5], c6 = CH[N6];
+  const now = chapterAt(t);
+  // ---- はじめに
+  const iOut = cs(2) - .55;
+  S($('#introCard'), win(t, .15, iOut + .4, .6, .4), 0, (1 - eo((t - .15) / .7)) * 40 - eo((t - iOut) / .4) * 60);
+  const qa = cs(2) - .12, qb = c1.gap_start + .25;
+  S($('#qCard'), win(t, qa, qb, .45, .4), 0, (1 - eo((t - qa) / .5)) * 40);
+  { const k1 = eo((t - qa - .05) / .4), k2 = eo((t - cs(3) + .1) / .4);
+    S($('#q1'), k1, (1 - k1) * 20, 0); S($('#q2'), k2, (1 - k2) * 20, 0); }
+  $('#qK').style.opacity = eo((t - cs(4)) / .4).toFixed(3);
+  S($('#ansPill'), win(t, cs(5) - .1, qb, .45, .4), 0, (1 - eo((t - cs(5) + .1) / .45)) * 26);
+  // ---- 大きなカード（出ている間は後ろの画面を隠す）
+  const ha = c2.gap_start + .2, hb = c3.gap_start + .35, ma = c3.gap_start + .2, mb = c4.gap_start + .35, pa = c5.gap_start + .2, pb = cs(34) - .35;
+  const hO = win(t, ha, hb, .45, .35), mO = win(t, ma, mb, .45, .35), pO = win(t, pa, pb, .45, .35);
+  const jo = Math.max(hO, mO, pO);
+  // ---- パソコンの画面
+  const brA = c1.gap_start + .15, brB = c6.gap_start + .1;
+  S($('#br'), win(t, brA, brB, .5, .5) * (1 - jo), 0, (1 - eo((t - brA) / .6)) * 30);
+  const sw = T.push + .15;   // 新しいチャット → 会話
+  $('#sNew').style.opacity = (t < sw ? 1 : 1 - eo((t - sw) / .16)).toFixed(3);
+  $('#sConv').style.opacity = (t < sw - .05 ? 0 : eo((t - sw + .05) / .16)).toFixed(3);
+  // 新しいチャット：＋ → 一覧 → 選ぶ → 何も打たずに↑
+  S($('#pMenuN'), win(t, T.plus + .1, T.pick + .15, .25, .2), 0, (1 - eo((t - T.plus - .1) / .25)) * -10);
+  $('#pItemN').style.background = (t >= T.pick - .55 && t < T.pick + .15) ? '#f1f1f1' : 'transparent';
+  $('#inN').innerHTML = (t >= T.pick + .15 && t < T.push + .05) ? '<span class="chip3"><b>フ</b>フヤセルAI【新NISA枠の相談室】</span>' + caret(t) : ph(t);
+  // 会話：止まり方5つ
+  up('#ubA1', T.push + .25, 0, .3);
+  up('#ansA1', T.push + .6);
+  [1, 2, 3, 4, 5].forEach(i => { const a = Math.max(T.push + 1.0, M.itsutsu - .5) + (i - 1) * .22, k = eo((t - a) / .3); S($('#st' + i), k, (1 - k) * -16, 0);
+    $('#st' + i + ' .hb').style.opacity = eo((t - (M.hodoku1 - .3) - (i - 1) * .15) / .3).toFixed(3); });
+  $('#memoMini').style.opacity = eo((t - M.hodoku1 - 1.2) / .35).toFixed(3);
+  // 銘柄を送る → 答え
+  up('#ubA2', T.sendC + .2, 0, .3);
+  up('#stkC', T.sendC + .6);
+  // 画像を貼って送る → 読み取り
+  up('#ubA3', T.sendD + .2, 0, .3);
+  up('#ansD', T.sendD + .6);
+  [['#rdNokori', M.nokori - .35], ['#rdMochi', M.mochikabu - .35]].forEach(([s, a]) => { $(s).style.opacity = eo((t - Math.max(a, T.sendD + .7)) / .3).toFixed(3); });
+  up('#nextD', T.sendD + 1.4);
+  [1, 2, 3].forEach(i => { const k = eo((t - T.sendD - 1.5 - (i - 1) * .2) / .3); S($('#nq' + i), k, (1 - k) * -16, 0); });
+  $('#nqF').style.opacity = eo((t - T.sendD - 2.1) / .3).toFixed(3);
+  // 番号を送る → 続き
+  up('#ubA4', T.send1 + .2, 0, .3);
+  up('#ansE', T.send1 + .55);
+  // 入力欄
+  $('#inA').innerHTML = (t >= T.typeC && t < T.sendC + .05) ? typed('〇〇〇〇', t, T.typeC, 6) + caret(t)
+                      : (t >= T.img && t < T.sendD + .05) ? IMG_S + caret(t)
+                      : (t >= T.type1 && t < T.send1 + .05) ? typed('1', t, T.type1, 5) + caret(t) : ph(t);
+  $('#cvA').style.transform = `translateY(${(-scroll(SCRA, t)).toFixed(1)}px)`;
+  $('#imgNote').style.opacity = win(t, brA + .3, brB, .3, .3).toFixed(3);
+  // ---- 右の説明
+  for (const el of document.querySelectorAll('.co')) {
+    const a = cs(+el.dataset.a) - .05, b = ce(+el.dataset.b) - .05;
+    S(el, win(t, a, b, .35, .3) * (1 - jo), (1 - eo((t - a) / .4)) * 40, 0);
+  }
+  // ---- 決まりと数字でほどく
+  S($('#hodokuCard'), hO, 0, (1 - eo((t - ha) / .5)) * 30);
+  { const a1 = cs(12) - .1, b1 = cs(13) - .15; S($('#hT1'), win(t, a1, b1, .35, .3)); S($('#hT2'), eo((t - b1 - .05) / .35));
+    ['#km1', '#km2', '#km3', '#km4', '#km5'].forEach((s, i) => { const a = cs(12) + .15 + i * .3; S($(s), win(t, a, b1, .3, .3), 0, (1 - eo((t - a) / .35)) * 14); }); }
+  { const k = eo((t - cs(13) - .05) / .4); S($('#myth'), k, 0, (1 - k) * 16); }
+  $('#mythLine').style.transform = `scaleX(${eo((t - cs(14) + .05) / .45).toFixed(3)})`;
+  { const k = eo((t - cs(14) - .2) / .4); S($('#gLab'), k, (1 - k) * -20, 0); S($('#gauge'), k, 0, (1 - k) * 16); }
+  const blk = $('#gBlk');
+  if (t < M.utta - .15) { blk.style.background = '#c41818'; blk.style.borderStyle = 'solid'; blk.style.color = '#fff'; blk.textContent = '〇〇万円の株'; }
+  else if (t < M.modori - .15) { blk.style.background = 'transparent'; blk.style.borderStyle = 'dashed'; blk.style.color = '#c41818';
+    blk.textContent = t < M.katta - .15 ? '売った' : '買った値段 〇〇万円'; }
+  else { blk.style.background = '#2f9e44'; blk.style.borderColor = '#2f9e44'; blk.style.borderStyle = 'solid'; blk.style.color = '#fff'; blk.textContent = '〇〇万円分が戻る'; }
+  if (t < M.modori - .15) blk.style.borderColor = '#c41818';
+  { const k = eo((t - M.yokunen + .35) / .35); S($('#gArrow'), k, 0, (1 - k) * -14); }
+  { const k = eo((t - M.modori - .3) / .4); S($('#gNote'), k, 0, (1 - k) * 12); }
+  [1, 2, 3].forEach(i => { const a = cs(16) - .15 + (i - 1) * .2, k = eo((t - a) / .35); S($('#ch' + i), k, 0, (1 - k) * 16);
+    $('#ch' + i).classList.toggle('done', t >= M.hazushi - .1 + (i - 1) * .25); });
+  // ---- NISA作戦メモ（見出しが上から光る・値が出る）
+  S($('#memoCard'), mO, 0, (1 - eo((t - ma) / .5)) * 30);
+  const lit = [['#r1', M.tomatte - .15], ['#r2', M.hodoku2 - .15], ['#r3', M.nisaoku - .2], ['#r4', M.kotoshi - .15], ['#r5', M.rainen - .15],
+               ['#r6', M.urikata - .15], ['#r7', M.urikata + .7], ['#r8', M.itte - .15]];
+  const order = lit.map(x => x[1]);
+  lit.forEach(([s, a]) => {
+    const k = eo((t - a) / .35);
+    $(s + ' .v').style.opacity = k.toFixed(3);
+    const nx = order.filter(x => x > a).sort((p, q) => p - q)[0] ?? 1e9;
+    $(s).classList.toggle('on', (t >= a && t < nx) || (s === '#r8' && t >= a));
+  });
+  [['#r3a', M.nisaoku - .2], ['#r3b', M.tokutei - .15]].forEach(([s, a]) => { $(s).style.opacity = eo((t - a) / .3).toFixed(3); });
+  $('#r8d').classList.toggle('mk', t >= M.hiduke - .15);
+  $('#r8d').style.opacity = '1';
+  // ---- 落とし穴も先回り
+  S($('#trapCard'), pO, 0, (1 - eo((t - pa) / .5)) * 30);
+  [1, 2, 3, 4].forEach(i => { const k = eo((t - cs(28 + i) + .1) / .4); S($('#sg' + i), k, (1 - k) * 40, 0); });
+  { const k = eo((t - M.sakimawari + .5) / .35); S($('#stamp'), k, 0, 0, 1.25 - .25 * k); }
+  // ---- 赤い枠
+  let ro = 0, rr = null, rp = [16, 16];
+  for (const [s, a, b, clip, pd] of RINGS) {
+    const o = win(t, a, b, .3, .25);
+    if (o > ro) {
+      let r = rectOf(s);
+      if (clip) {   // 会話の中の部品＝見えている所（画面の絵の中・下のぼかしより上）で切る
+        const bd = $('#br .body').getBoundingClientRect(), top = bd.top + 8, bot = bd.top + 470;
+        const y1 = Math.max(r.y, top), y2 = Math.min(r.y + r.h, bot);
+        if (y2 - y1 < 20) continue;
+        r = { x: r.x, y: y1, w: r.w, h: y2 - y1 };
+      }
+      ro = o; rr = r; rp = Array.isArray(pd) ? pd : [pd ?? 16, pd ?? 16];
+    }
+  }
+  ro *= (1 - jo);
+  if (rr && ro > 0) {
+    const [px, py] = rp, p = 1 + .015 * Math.sin(t * 6);
+    const R = $('#ring'); R.style.width = (rr.w + px * 2) + 'px'; R.style.height = (rr.h + py * 2) + 'px';
+    S(R, ro, rr.x - px, rr.y - py, p);
+  } else $('#ring').style.opacity = 0;
+  // ---- 大きなカードの中の枠（作戦メモ＝次の1手の行・ほどく＝戻るゲージ）
+  if (mO > 0 && t >= M.hitotsu - .3 && t < c4.gap_start) {
+    const r = rectOf('#r8'), px = 10, py = 2, o = win(t, M.hitotsu - .3, c4.gap_start, .3, .3) * mO;
+    const R = $('#ring'); R.style.width = (r.w + px * 2) + 'px'; R.style.height = (r.h + py * 2) + 'px';
+    S(R, o, r.x - px, r.y - py, 1 + .006 * Math.sin(t * 6));
+  }
+  if (hO > 0 && t >= M.modori - .2 && t < cs(16) - .2) {
+    const r = rectOf('#gBlk'), pad = 10, o = win(t, M.modori - .2, cs(16) - .2, .3, .3) * hO;
+    const R = $('#ring'); R.style.width = (r.w + pad * 2) + 'px'; R.style.height = (r.h + pad * 2) + 'px';
+    S(R, o, r.x - pad, r.y - pad, 1 + .006 * Math.sin(t * 6));
+  }
+  // ---- 指
+  let cv = 0; for (const [a, b] of CURV) cv = Math.max(cv, win(t, a, b, .25, .25));
+  cv *= (1 - jo);
+  if (cv > 0) {
+    const pts = CURP.map(([tt, at]) => { if (Array.isArray(at)) return [tt, at[0], at[1]]; const r = rectOf(at); return [tt, r.cx - 6, r.cy - 4]; });
+    let x = pts[0][1], y = pts[0][2];
+    for (let i = 0; i < pts.length; i++) {
+      if (t >= pts[i][0]) { x = pts[i][1]; y = pts[i][2]; }
+      if (i + 1 < pts.length && t >= pts[i][0] && t < pts[i + 1][0]) { const k = eio((t - pts[i][0]) / (pts[i + 1][0] - pts[i][0])); x = pts[i][1] + (pts[i + 1][1] - pts[i][1]) * k; y = pts[i][2] + (pts[i + 1][2] - pts[i][2]) * k; break; }
+    }
+    S($('#cur'), cv, x, y);
+    let rp2 = 0;
+    for (const [ct] of CLICKS) { const k = (t - ct) / .55; if (k >= 0 && k <= 1) rp2 = k; }
+    if (rp2 > 0) S($('#rip'), (1 - rp2) * cv, x - 45 + 8, y - 45 + 6, .3 + rp2 * 1.2); else $('#rip').style.opacity = 0;
+  } else { $('#cur').style.opacity = 0; $('#rip').style.opacity = 0; }
+  { const pressed = new Set(); for (const [ct, s] of CLICKS) if (t - ct >= 0 && t - ct < .25) pressed.add(s);
+    for (const [, s] of CLICKS) $(s).style.filter = pressed.has(s) ? 'brightness(.82)' : ''; }
+  // ---- まとめ
+  const sa = c6.gap_start + .1, ea = cs(38) - .15;
+  S($('#sumCard'), win(t, sa, ea, .5, .35), 0, (1 - eo((t - sa) / .6)) * 30);
+  [['#sr1', cs(36) + .1], ['#sr2', cs(36) + 1.0], ['#sr3', cs(37) + .6]].forEach(([s, a]) => { const k = eo((t - a) / .4); S($(s), k, (1 - k) * 40, 0); });
+  $('#end').style.opacity = eo((t - ea) / .5).toFixed(3);
+  // ---- 上の札
+  const labName = { [N1]: '使い方', [N4]: '銘柄も聞ける', [N5]: '番号で続きも' }[now.name];
+  $('#labT').textContent = labName || '';
+  S($('#lab'), labName ? win(t, now.gap_start + .3, now.end, .3, .2) * (1 - jo) : 0);
+  // ---- 字幕
+  let capT = '';
+  for (const c of TL.captions) { const ch = chapterAt(c.start); const b = Math.min(c.end, ch.end); if (t >= c.start && t < b) capT = c.text; }
+  $('#subT').textContent = capT; $('#sub').style.opacity = capT ? 1 : 0;
+}
+window.render = render;
+(async () => {
+  TL = await (await fetch('timeline_v2.json?v=' + Date.now())).json();
+  setup();
+  await document.fonts.ready;
+  await Promise.all([...document.images].map(i => i.complete ? 0 : new Promise(r => { i.onload = i.onerror = r; })));
+  render(0);
+  window.TL = TL; window.READY = true;
+})();
+</script>
+</body>
+</html>
